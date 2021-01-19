@@ -16,6 +16,7 @@ public class LinkedListDeque <T> {
             next = y;
             pre = z;
         }
+
     }
     private TNode sentinel;
     private TNode last;
@@ -28,32 +29,41 @@ public class LinkedListDeque <T> {
         size = 0;
     }
 
-    public LinkedListDeque(T x){
-        sentinel = new TNode (place, null, null);
-        sentinel.next= new TNode (x, sentinel,sentinel);
-        sentinel.pre = sentinel.next;
-        last = sentinel.next;
-        size = 1;
-    }
-
     /** adds an item of type T to the front of the deque
      *  must not involve any looping or recursion
      *  Big O = c.
      */
     public void addFirst (T x){
-        sentinel.next = new TNode (x,sentinel.next,sentinel );
-        sentinel.next.next.pre = sentinel.next;
-        size += 1;
+        if(size == 0){
+            TNode temp = new TNode (x,sentinel,sentinel);
+            sentinel.next = temp;
+            sentinel.pre = temp;
+            last = temp;
+            size += 1;
+        } else {
+            sentinel.next = new TNode (x,sentinel.next,sentinel );
+            sentinel.next.next.pre = sentinel.next;
+            size += 1;
+        }
+
     }
 
     /** Adds an item of type T to the back of the deque.
      * must not involve any looping or recursion
      * Big O = c.*/
     public void addLast(T x){
-        TNode temp = new TNode (x,sentinel,last);
-        last.next = temp;
-        last = temp;
-        size += 1;
+        if(size == 0){
+            TNode temp = new TNode (x,sentinel,sentinel);
+            sentinel.next = temp;
+            sentinel.pre = temp;
+            last = temp;
+            size += 1;
+        }else {
+            TNode temp = new TNode(x, sentinel, last);
+            last.next = temp;
+            last = temp;
+            size += 1;
+        }
     }
 
     /** Returns true if deque is empty, false otherwise.*/
@@ -72,6 +82,8 @@ public class LinkedListDeque <T> {
         TNode temp= sentinel.next;
         for(int i = 0; i < size; i ++){
             System.out.print(temp.item.toString() + " ");
+            temp = temp.next;
+
         }
     }
 
@@ -83,7 +95,7 @@ public class LinkedListDeque <T> {
     public T removeFirst(){
         if (size == 0){
             return null;
-        } else {
+        } else{
             TNode temp = sentinel.next;
             T ans = (T) temp.item;
             sentinel.next = sentinel.next.next;
@@ -92,17 +104,19 @@ public class LinkedListDeque <T> {
             temp = null;
             return ans;
         }
+
     }
 
-    /** Removes and returns the item at the back of the deque.
-     * If no such item exists, returns null.
-     * must not involve any looping or recursion
-     * Big O = c.
-     * Do not maintain references to items that are no longer in the deque.*/
+
+        /** Removes and returns the item at the back of the deque.
+         * If no such item exists, returns null.
+         * must not involve any looping or recursion
+         * Big O = c.
+         * Do not maintain references to items that are no longer in the deque.*/
     public T removeLast(){
         if (size == 0){
             return null;
-        } else {
+        }else {
             T ans = (T) last.item;
             last.pre.next = sentinel;
             sentinel.pre = last.pre;
@@ -121,7 +135,7 @@ public class LinkedListDeque <T> {
             return null;
         } else {
             TNode temp = sentinel;
-            for(int i = 0; i < index; i ++){
+            for(int i = 0; i <= index; i ++){
                 temp = temp.next;
             }
             return (T) temp.item;
@@ -145,5 +159,4 @@ public class LinkedListDeque <T> {
                 return (T) subCopy(this).getRecursive(index-1);
             }
         }
-
 }
