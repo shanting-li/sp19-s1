@@ -70,4 +70,21 @@ public class IntListTest {
       * to add a main method. See ArithmeticTest.java for an
       * example. */
 
+    /** That the function returns a reversed list.
+     *That the function is destructive, i.e. when it is done running,
+     *the list pointed to by A has been tampered with. You can use assertNotEquals.
+     *That the method handles a null input properly.*/
+    @Test(timeout = 1000)
+    public void testReverse(){
+        IntList A = IntList.of(1, 2, 3, 5);
+        IntList expectedA = IntList.of(5, 3, 2, 1);
+        assertEquals(expectedA, IntList.reverse(A));
+        assertEquals(expectedA, A);
+
+        IntList B = IntList.of();
+        IntList.reverse(B);
+        IntList expectedB = IntList.of();
+        assertEquals(expectedB, B);
+
+    }
 }

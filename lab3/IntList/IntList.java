@@ -1,12 +1,4 @@
 import java.util.Formatter;
-
-/**
- * A naked recursive list of integers, similar to what we saw in lecture 3, but
- * with a large number of additional methods.
- *
- * @author P. N. Hilfinger, with some modifications by Josh Hug and melaniecebula
- *         [Do not modify this file.]
- */
 public class IntList {
     /**
      * First element of list.
@@ -16,21 +8,23 @@ public class IntList {
      * Remaining elements of list.
      */
     public IntList rest;
-
+    public int index;
     /**
      * A List with first FIRST0 and rest REST0.
      */
     public IntList(int first0, IntList rest0) {
         first = first0;
         rest = rest0;
+        index = 0;
     }
 
     /**
      * A List with null rest, and first = 0.
      */
     public IntList() {
-    /* NOTE: public IntList () { }  would also work. */
+        /* NOTE: public IntList () { }  would also work. */
         this(0, null);
+        index = 0;
     }
 
     /**
@@ -83,13 +77,13 @@ public class IntList {
     public static IntList dcatenate(IntList A, IntList B) {
         //TODO:  fill in method
         /** iteration
-        int i = 0;
-        IntList mid = A;
-        while(mid.rest != null){
-            mid = mid.rest;
-        }
-        mid.rest = B;
-        return A;*/
+         int i = 0;
+         IntList mid = A;
+         while(mid.rest != null){
+         mid = mid.rest;
+         }
+         mid.rest = B;
+         return A;*/
         if(A.rest == null){
             A.rest = B;
         } else {
@@ -111,19 +105,42 @@ public class IntList {
             return new IntList(A.first, catenate(A.rest, B));
         }
     }
+    /**
+     * Returns the reverse of the given IntList.
+     * This method is destructive. If given null
+     * as an input, returns null.
+     */
 
+    public static int size(IntList A){
+        IntList count = A;
+        while(count.rest != null) {
+            count = count.rest;
+        }
+        int size = count.index;
+        return size;
+    }
 
+    public static IntList get( IntList A , int a ){
+        IntList temp = A;
+        for (int i =0 ;i < a; i ++ ){
+            temp = temp.rest;
+        }
+        return temp;
+    }
 
-
-
-
-
-
-
-
-
-
-
+    public static IntList reverse(IntList A){
+        //return null;
+        int size = size(A);
+        IntList count = A;
+        for (int i = 0; i < size/2; i ++){
+            int tp = count.first;
+            IntList c = get(A,size - i - 1);
+            count.first = c.first;
+            c.first = tp;
+            count = count.rest;
+        }
+        return A;
+    }
 
 
 
@@ -148,6 +165,7 @@ public class IntList {
 
         if (args.length > 0) {
             result = new IntList(args[0], null);
+            result.index = 0;
         } else {
             return null;
         }
@@ -155,6 +173,7 @@ public class IntList {
         int k;
         for (k = 1, p = result; k < args.length; k += 1, p = p.rest) {
             p.rest = new IntList(args[k], null);
+            p.rest.index = k;
         }
         return result;
     }
