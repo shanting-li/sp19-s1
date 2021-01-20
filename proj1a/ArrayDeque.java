@@ -77,14 +77,19 @@ public class ArrayDeque <T> {
      * Big O = c.
      * For arrays of length 16 or more, your usage factor should always be at least 25%.*/
     public T removeFirst() {
-        T ans = items[nextFirst + 1];
-        items[nextFirst + 1] = null;
-        nextFirst += 1;
-        size -= 1;
-        if (size * 4 < items.length & items.length > 16){
-            resize();
+        if(size == 0){
+            return null;
+        }else{
+            T ans = items[nextFirst + 1];
+            items[nextFirst + 1] = null;
+            nextFirst += 1;
+            size -= 1;
+            if(size * 4 < items.length & items.length > 16){
+                resize();
+            }
+            return ans;
         }
-        return ans;
+
     }
 
     /** Removes and returns the item at the back of the deque.
@@ -93,11 +98,11 @@ public class ArrayDeque <T> {
      * Big O = c.
      * For arrays of length 16 or more, your usage factor should always be at least 25%*/
     public T removeLast(){
-        if (nextLast <= 1){
+        if(size == 0){
             return null;
         }else{
             T ans = items[nextLast - 1];
-            items[nextFirst - 1] = null;
+            items[nextLast - 1] = null;
             nextLast -= 1;
             size -= 1;
             if (size * 4 < items.length & items.length > 16){
@@ -113,6 +118,9 @@ public class ArrayDeque <T> {
      * use iteration, not recursion
      */
     public T get(int index){
+        if(index >= size){
+            return null;
+        }
         return items[nextFirst + 1 + index];
     }
 

@@ -61,16 +61,40 @@ public class testAD {
     }
 
     public static void testAll(){
-        LinkedListDeque<Integer> a = new LinkedListDeque<Integer>();
-        for (int i = 0; i < 30; i ++){
+        ArrayDeque<Integer> a = new ArrayDeque<Integer>();
+        for (int i = 0; i < 12; i ++){
             a.addLast(i);
         }
-        a.printDeque();//0,1,...29
+        for (int i = 0; i < 2; i ++){
+            a.removeLast();
+        }
+        a.printDeque();
+        /**System.out.println(a.removeFirst());
+        System.out.println("size = " + a.size());//0
+        for (int i = 0; i < 18; i ++){
+            a.addLast(i);
+        }
+        a.printDeque();//0,1,...17
         System.out.println();
-        System.out.println(a.getRecursive(0));//0
-        System.out.println(a.getRecursive(5));//5
-        System.out.println(a.getRecursive(29));//29
-        System.out.println(a.getRecursive(30));//null
+        System.out.println(a.get(0));//0
+        System.out.println(a.get(5));//5
+        System.out.println(a.get(11));//11
+        System.out.println(a.get(30));//null
+        a.removeFirst();//0-1,2,3,...
+        a.removeFirst();//1-2,3,4,...
+        a.removeLast();//17-2,3,4...16
+        a.removeFirst();//2-3,4,...,16
+        System.out.println("size = " + a.size());//14
+        a.printDeque();
+        System.out.println();
+        a.removeLast();//16-3,4,...15
+        a.removeLast();//15-3,4,5,...,14
+        a.removeFirst();//3-4,5,...,14
+        a.removeFirst();//4-5,6,...,14
+        a.printDeque();
+        System.out.println();
+        System.out.println("size = " + a.size());//10*/
+
     }
     public static void main(String[] args){
         //testAddFirst();
