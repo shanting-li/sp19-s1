@@ -7,6 +7,7 @@ public class testLLD {
         a.addFirst(3);
         a.addFirst(4);//4,3,2,1,0
         a.printDeque();
+        System.out.println("");
         return a;
     }
     public static LinkedListDeque testAddLast(){
@@ -17,6 +18,7 @@ public class testLLD {
         a.addLast(3);
         a.addLast(4);
         a.printDeque();
+        System.out.println("");
         return a;
     }
     public static void testRemoveFirst(){
@@ -28,8 +30,9 @@ public class testLLD {
         a.addFirst(4);//4,3,2,1,0
         a.printDeque();
         System.out.println("");
-        System.out.println(a.removeFirst());//0
+        System.out.println(a.removeFirst());//4
         a.printDeque();
+        System.out.println("");
     }
 
     public static void testRemoveLast(){
@@ -43,6 +46,7 @@ public class testLLD {
         System.out.println("");
         System.out.println(a.removeLast());//0
         a.printDeque();
+        System.out.println("");
     }
 
     public static void testGet(){

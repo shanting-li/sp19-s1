@@ -1,4 +1,4 @@
-public class LinkedListDeque <T> {
+public class LinkedListDeque<T> {
     /** invariants
      * size: the number of items in the list;
      * sentinel:the only node in an empty list;
@@ -7,11 +7,11 @@ public class LinkedListDeque <T> {
      */
     private int size;
     private T place;
-    private class TNode<T>{
+    private class TNode<T> {
         public T item;
         public TNode next;
         public TNode pre;
-        public TNode(T x, TNode y, TNode z){
+        public TNode(T x, TNode y, TNode z) {
             item = x;
             next = y;
             pre = z;
@@ -21,7 +21,7 @@ public class LinkedListDeque <T> {
     private TNode sentinel;
     private TNode last;
 
-    public LinkedListDeque(){
+    public LinkedListDeque() {
         sentinel = new TNode (place, null,null);
         sentinel.next = sentinel;
         sentinel.pre = sentinel;
@@ -34,7 +34,7 @@ public class LinkedListDeque <T> {
      *  Big O = c.
      */
     public void addFirst (T x){
-        if(size == 0){
+        if (size == 0) {
             TNode temp = new TNode (x,sentinel,sentinel);
             sentinel.next = temp;
             sentinel.pre = temp;
@@ -51,14 +51,14 @@ public class LinkedListDeque <T> {
     /** Adds an item of type T to the back of the deque.
      * must not involve any looping or recursion
      * Big O = c.*/
-    public void addLast(T x){
-        if(size == 0){
+    public void addLast(T x) {
+        if (size == 0) {
             TNode temp = new TNode (x,sentinel,sentinel);
             sentinel.next = temp;
             sentinel.pre = temp;
             last = temp;
             size += 1;
-        }else {
+        } else {
             TNode temp = new TNode(x, sentinel, last);
             last.next = temp;
             last = temp;
@@ -78,9 +78,9 @@ public class LinkedListDeque <T> {
     }
 
     /** Prints the items in the deque from first to last, separated by a space.*/
-    public void printDeque(){
+    public void printDeque() {
         TNode temp= sentinel.next;
-        for(int i = 0; i < size; i ++){
+        for (int i = 0; i < size; i ++) {
             System.out.print(temp.item.toString() + " ");
             temp = temp.next;
 
@@ -92,10 +92,10 @@ public class LinkedListDeque <T> {
      * must not involve any looping or recursion
      * Big O = c.
      * Do not maintain references to items that are no longer in the deque.*/
-    public T removeFirst(){
-        if (size == 0){
+    public T removeFirst() {
+        if (size == 0) {
             return null;
-        } else{
+        } else {
             TNode temp = sentinel.next;
             T ans = (T) temp.item;
             sentinel.next = sentinel.next.next;
@@ -113,10 +113,10 @@ public class LinkedListDeque <T> {
          * must not involve any looping or recursion
          * Big O = c.
          * Do not maintain references to items that are no longer in the deque.*/
-    public T removeLast(){
-        if (size == 0){
+    public T removeLast() {
+        if (size == 0) {
             return null;
-        }else {
+        } else {
             T ans = (T) last.item;
             last.pre.next = sentinel;
             sentinel.pre = last.pre;
@@ -131,11 +131,11 @@ public class LinkedListDeque <T> {
      * use iteration, not recursion
      */
     public T get(int index){
-        if (size == 0){
+        if (size == 0) {
             return null;
         } else {
             TNode temp = sentinel;
-            for(int i = 0; i <= index; i ++){
+            for (int i = 0; i <= index; i ++) {
                 temp = temp.next;
             }
             return (T) temp.item;
@@ -143,19 +143,19 @@ public class LinkedListDeque <T> {
 
     }
 
-    private LinkedListDeque subCopy(LinkedListDeque x){
-        LinkedListDeque ans = new LinkedListDeque();
+    private LinkedListDeque<T> subCopy(LinkedListDeque<T> x) {
+        LinkedListDeque<T> ans = new LinkedListDeque<T>();
         ans.sentinel = x.sentinel.next;
         ans.size = x.size-1;
         return ans;
     }
     /**Same as get, but uses recursion*/
-    public T getRecursive(int index){
-        if(index >= size) {
+    public T getRecursive(int index) {
+        if (index >= size) {
             return null;
-        } else if (index == 0){
+        } else if (index == 0) {
                 return (T) sentinel.next.item;
-            } else{
+            } else {
                 return (T) subCopy(this).getRecursive(index-1);
             }
         }
