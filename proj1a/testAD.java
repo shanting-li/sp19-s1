@@ -1,17 +1,17 @@
 public class testAD {
 
-    public static ArrayDeque testAddFirst(){
+    public static ArrayDeque testAddFirst() {
         ArrayDeque<Integer> a = new ArrayDeque<Integer>();
         a.addFirst(0);
         a.addFirst(1);
         a.addFirst(2);
         a.addFirst(3);
-        a.addFirst(4);//4,3,2,1,0
+        a.addFirst(4); //4,3,2,1,0
         System.out.println("size = " + a.size());
         a.printDeque();
         return a;
     }
-    public static ArrayDeque testAddLast(){
+    public static ArrayDeque testAddLast() {
         ArrayDeque<Integer> a = new ArrayDeque<Integer>();
         a.addLast(0);
         a.addLast(1);
@@ -22,60 +22,60 @@ public class testAD {
         a.printDeque();
         return a;
     }
-    public static void testRemoveFirst(){
+    public static void testRemoveFirst() {
         ArrayDeque<Integer> a = new ArrayDeque<Integer>();
         a.addFirst(0);
         a.addFirst(1);
         a.addFirst(2);
         a.addFirst(3);
-        a.addFirst(4);//4,3,2,1,0
+        a.addFirst(4); //4,3,2,1,0
         a.printDeque();
         System.out.println("");
-        System.out.println(a.removeFirst());//4
+        System.out.println(a.removeFirst()); //4
         a.printDeque();
         System.out.println("");
         System.out.println("size = " + a.size());
     }
 
-    public static void testRemoveLast(){
+    public static void testRemoveLast() {
         ArrayDeque<Integer> a = new ArrayDeque<Integer>();
         a.addFirst(0);
         a.addFirst(1);
         a.addFirst(2);
         a.addFirst(3);
         a.addFirst(4);
-        a.printDeque();//4,3,2,1,0
+        a.printDeque(); //4,3,2,1,0
         System.out.println("");
-        System.out.println(a.removeLast());//0
-        a.printDeque();//4,3,2,1
+        System.out.println(a.removeLast()); //0
+        a.printDeque(); //4,3,2,1
         System.out.println("");
         System.out.println("size = " + a.size());
     }
 
-    public static void testGet(){
+    public static void testGet() {
         ArrayDeque<Integer> a = new ArrayDeque<Integer>();
         a.addFirst(0);
         a.addFirst(1);
         a.addFirst(2);
         a.addFirst(3);
         a.addFirst(4);
-        a.printDeque();//4,3,2,1,0
+        a.printDeque(); //4,3,2,1,0
         System.out.println("");
-        System.out.println(a.get(0));//4
-        System.out.println(a.get(2));//2
-        System.out.println(a.get(4));//0
+        System.out.println(a.get(0)); //4
+        System.out.println(a.get(2)); //2
+        System.out.println(a.get(4)); //0
     }
 
-    public static void testAll(){
+    public static void testAll() {
         ArrayDeque<Integer> a = new ArrayDeque<Integer>();
-        for (int i = 0; i < 20; i ++){
+        for (int i = 0; i < 20; i ++) {
             a.addLast(i);
             //a.addFirst(i);
         }
-        a.printDeque();//0,1,2,...,12,13,...,19
+        a.printDeque(); //0,1,2,...,12,13,...,19
         System.out.println("");
 
-        for (int i = 0; i < 17; i ++){
+        for (int i = 0; i < 17; i ++) {
             a.removeFirst();
         }
         a.printDeque();//17,18,19
@@ -106,7 +106,7 @@ public class testAD {
         System.out.println("size = " + a.size());//1
 
     }
-    public static void main(String[] args){
+    public static void main(String[] args) {
         //testAddFirst();
         //testAddLast();
         //testRemoveFirst();

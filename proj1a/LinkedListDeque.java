@@ -8,10 +8,10 @@ public class LinkedListDeque<T> {
     private int size;
     private T place;
     private class TNode<T> {
-        public T item;
-        public TNode next;
-        public TNode pre;
-        public TNode(T x, TNode y, TNode z) {
+        private T item;
+        private TNode next;
+        private TNode pre;
+        private TNode(T x, TNode y, TNode z) {
             item = x;
             next = y;
             pre = z;
@@ -22,7 +22,7 @@ public class LinkedListDeque<T> {
     private TNode last;
 
     public LinkedListDeque() {
-        sentinel = new TNode (place, null,null);
+        sentinel = new TNode (place, null, null);
         sentinel.next = sentinel;
         sentinel.pre = sentinel;
         last = sentinel;
@@ -33,15 +33,15 @@ public class LinkedListDeque<T> {
      *  must not involve any looping or recursion
      *  Big O = c.
      */
-    public void addFirst (T x){
+    public void addFirst(T x) {
         if (size == 0) {
-            TNode temp = new TNode (x,sentinel,sentinel);
+            TNode temp = new TNode (x, sentinel, sentinel);
             sentinel.next = temp;
             sentinel.pre = temp;
             last = temp;
             size += 1;
         } else {
-            sentinel.next = new TNode (x,sentinel.next,sentinel );
+            sentinel.next = new TNode (x, sentinel.next, sentinel );
             sentinel.next.next.pre = sentinel.next;
             size += 1;
         }
@@ -53,7 +53,7 @@ public class LinkedListDeque<T> {
      * Big O = c.*/
     public void addLast(T x) {
         if (size == 0) {
-            TNode temp = new TNode (x,sentinel,sentinel);
+            TNode temp = new TNode (x, sentinel, sentinel);
             sentinel.next = temp;
             sentinel.pre = temp;
             last = temp;
@@ -130,7 +130,7 @@ public class LinkedListDeque<T> {
      * If no such item exists, returns null. Must not alter the deque!
      * use iteration, not recursion
      */
-    public T get(int index){
+    public T get(int index) {
         if (size == 0) {
             return null;
         } else {

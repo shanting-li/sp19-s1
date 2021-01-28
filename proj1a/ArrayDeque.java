@@ -17,7 +17,7 @@ public class ArrayDeque<T> {
     }
 
     private void resize() {
-        int newLen = Math.max(8,size * 3);
+        int newLen = Math.max(8, size * 3);
         T[] a = (T []) new Object[newLen];
         int midOld = size / 2;
         int sNew = a.length / 2 - midOld;
@@ -31,7 +31,7 @@ public class ArrayDeque<T> {
      *  must not involve any looping or recursion
      *  Big O = c.
      */
-    public void addFirst (T x) {
+    public void addFirst(T x) {
         if (nextFirst == 0) {
             resize();
         }
@@ -97,7 +97,7 @@ public class ArrayDeque<T> {
      * must not involve any looping or recursions
      * Big O = c.
      * For arrays of length 16+, usage factor should always be at least 25%*/
-    public T removeLast(){
+    public T removeLast() {
         if (size == 0) {
             return null;
         } else {
