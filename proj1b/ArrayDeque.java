@@ -132,6 +132,12 @@ public class ArrayDeque<T> implements Deque<T> {
         return items[nextFirst + 1 + index];
     }
 
+    public static void main(String[] args) {
+        ArrayDeque<Integer> a = new ArrayDeque<>();
+        a.addFirst(5);
+        a.printDeque();
+    }
+
 }
 
 
