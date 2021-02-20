@@ -37,6 +37,7 @@ public class Game {
 
     // keep track of the last shape drawn, a room or a hallway.
     private Stack<String> swayRecord = new Stack<>();
+    private Random RANDOM;
 
 
     /**
@@ -103,8 +104,7 @@ public class Game {
         }
     }
 
-    private Position randomStart(long seed) {
-        Random RANDOM = new Random(seed);
+    private Position randomStart() {
         Position ans = new Position(0, 0);
         ans.x = 2 + RANDOM.nextInt(WIDTH / 15);
         ans.y = 2 + RANDOM.nextInt(HEIGHT / 15);
@@ -113,8 +113,12 @@ public class Game {
     }
 
     private void randomSide() {
-        int seed = (int) (Math.random() * 4);
-        switch (seed) {
+        //if seed is the same, the result is the same
+        int seedSide = RANDOM.nextInt(4);
+        // total random
+        //int seedSide = (int) (Math.random() * 4);
+
+        switch (seedSide) {
             case 0:
                 side = "top";
                 break;
@@ -291,8 +295,13 @@ public class Game {
     private Stack<Position> helpSetRoomPos(Position modStart) {
         Stack<Position> ans = new Stack<>();
 
-        int roomWidth = 4 + (int) (Math.random() * (roomMax - 4 + 1));//4-8
-        int roomHeight = 4 + (int) (Math.random() * (roomMax - 4 + 1));
+        // false random (same seed, same number)
+        int roomWidth = 4 + RANDOM.nextInt(roomMax - 4 + 1);//4-8
+        int roomHeight = 4 + RANDOM.nextInt(roomMax - 4 + 1);//4-8
+
+        // total random
+        //int roomWidth = 4 + (int) (Math.random() * (roomMax - 4 + 1));//4-8
+        //int roomHeight = 4 + (int) (Math.random() * (roomMax - 4 + 1));
 
         int leftBound = modStart.x - roomWidth + 2;
         int btBound = modStart.y - roomHeight + 2;
@@ -305,19 +314,31 @@ public class Game {
         switch (side) {
             //新房间的左右边界被限定
             case "top":
-                startX = leftBound + (int) (Math.random() * (roomWidth - 2));
+                //false random
+                startX = leftBound + RANDOM.nextInt(roomWidth - 2);
+                //total random
+                //startX = leftBound + (int) (Math.random() * (roomWidth - 2));
                 startY = modStart.y;
                 break;
             case "bottom":
-                startX = leftBound + (int) (Math.random() * (roomWidth - 2));
+                //false random
+                startX = leftBound + RANDOM.nextInt(roomWidth - 2);
+                //total random
+                //startX = leftBound + (int) (Math.random() * (roomWidth - 2));
                 startY = modStart.y - roomHeight + 1;
                 break;
             case "right":
-                startY = btBound + (int) (Math.random() * (roomHeight - 2));
+                //false random
+                startY = btBound + RANDOM.nextInt(roomHeight - 2);
+                //total random
+                //startY = btBound + (int) (Math.random() * (roomHeight - 2));
                 startX = modStart.x;
                 break;
             default: //left
-                startY = btBound + (int) (Math.random() * (roomHeight - 2));
+                //false random
+                startY = btBound + RANDOM.nextInt(roomHeight - 2);
+                //total random
+                //startY = btBound + (int) (Math.random() * (roomHeight - 2));
                 startX = modStart.x - roomWidth + 1;
                 break;
         }
@@ -589,19 +610,31 @@ public class Game {
             case "top":
                 ans.y = endY - 1;
                 //the value range of X does not include the boundary
-                ans.x = (startX + 1) + (int) (Math.random() * (roomWidth - 2));
+                // false random
+                ans.x = (startX + 1) + RANDOM.nextInt(roomWidth - 2);
+                // total random
+                //ans.x = (startX + 1) + (int) (Math.random() * (roomWidth - 2));
                 break;
             case "bottom":
                 ans.y = startY;
-                ans.x = (startX + 1) + (int) (Math.random() * (roomWidth - 2));
+                // false random
+                ans.x = (startX + 1) + RANDOM.nextInt(roomWidth - 2);
+                // total random
+                //ans.x = (startX + 1) + (int) (Math.random() * (roomWidth - 2));
                 break;
             case "left":
                 ans.x = startX;
-                ans.y = (startY + 1) + (int) (Math.random() * (roomHeight - 2));
+                // false random
+                ans.y = (startY + 1) + RANDOM.nextInt(roomWidth - 2);
+                // total random
+                //ans.y = (startY + 1) + (int) (Math.random() * (roomHeight - 2));
                 break;
             case "right":
                 ans.x = endX - 1;
-                ans.y = (startY + 1) + (int) (Math.random() * (roomHeight - 2));
+                // false random
+                ans.y = (startY + 1) + RANDOM.nextInt(roomHeight - 2);
+                // total random
+                //ans.y = (startY + 1) + (int) (Math.random() * (roomHeight - 2));
                 break;
         }
         return ans;
@@ -803,7 +836,10 @@ public class Game {
     private Stack<Position> helpSetWayPos(Position modStart) {
         Stack<Position> ans = new Stack();
 
-        int wayLength = wayMin + (int) (Math.random() * (wayMax - wayMin + 1));//2+8=10
+        // false random
+        int wayLength = wayMin + RANDOM.nextInt(wayMax - wayMin + 1);//2+8=10
+        // total random
+        //int wayLength = wayMin + (int) (Math.random() * (wayMax - wayMin + 1));//2+8=10
         int btY = modStart.y;
         int topY = modStart.y;
         int leftX = modStart.x;
@@ -1014,7 +1050,8 @@ public class Game {
             // 2. use the seed to get a start point and draw a new world
             initializeWorld();
             seedNum = Long.parseLong(seed);
-            start = randomStart(seedNum);
+            RANDOM = new Random(seedNum);
+            start = randomStart();
 
             setWorld(start, Tileset.WALL, Tileset.GRASS);
             start = new Position(newStart.x, newStart.y);
