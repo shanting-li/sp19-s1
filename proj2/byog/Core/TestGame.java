@@ -245,11 +245,22 @@ public class TestGame {
         ter.initialize(test.WIDTH, test.HEIGHT);
 
         String input1 = "n123sss";//pass
-        //input1 ="n18823swwwwwwwwwwddddddddddd";//pass
-        //input1 ="n9223372036854775806s";//pass
-        //input1 ="n999378s";//pass
+        input1 ="n18823swwwwwwwwwwddddddddddd";//pass
+        input1 ="n9223372036854775806s";//pass
+        input1 ="n999378s";//pass
+        input1 ="n954378s";//pass
+        input1 ="n331s";//pass
+        input1 ="n5s";//pass
         TETile[][] world = test.playWithInputString(input1);
         ter.renderFrame(world);
+        /*for(int i = 2; i < 200; i++) {
+            TETile[][] world = test.playWithInputString("n" + String.valueOf(i) + "s");
+            System.out.println(i);
+            //ter.renderFrame(world);
+        }*/
+
+
+
         //System.out.println(test.rightMostRoom.peek().x);
 
 

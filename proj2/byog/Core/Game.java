@@ -625,7 +625,7 @@ public class Game {
             case "left":
                 ans.x = startX;
                 // false random
-                ans.y = (startY + 1) + RANDOM.nextInt(roomWidth - 2);
+                ans.y = (startY + 1) + RANDOM.nextInt(roomHeight - 2);
                 // total random
                 //ans.y = (startY + 1) + (int) (Math.random() * (roomHeight - 2));
                 break;
