@@ -584,7 +584,7 @@ public class Game {
 
         int count = 0;
         while (!(PosSideValid(ans, target))) {
-            if (count < 2000) {
+            if (count < 1000) {
                 ans = helpSetPtOnRoom(startX, endX, startY, endY);
                 count++;
             } else {
@@ -905,7 +905,7 @@ public class Game {
 
         int count = 0;
         while (!(PosSideValid(ans, target))) {
-            if (count < 2000) {
+            if (count < 1000) {
                 ans = helpSetPtOnWay(leftX, rightX, btY, topY, modStart);
                 count++;
             } else {

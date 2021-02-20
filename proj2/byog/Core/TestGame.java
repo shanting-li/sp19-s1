@@ -244,8 +244,10 @@ public class TestGame {
         TERenderer ter = new TERenderer();
         ter.initialize(test.WIDTH, test.HEIGHT);
 
-        String input1 = "n123sss";
-        //input1 ="n18823swwwwwwwwwwddddddddddd";
+        String input1 = "n123sss";//pass
+        //input1 ="n18823swwwwwwwwwwddddddddddd";//pass
+        //input1 ="n9223372036854775806s";//pass
+        //input1 ="n999378s";//pass
         TETile[][] world = test.playWithInputString(input1);
         ter.renderFrame(world);
         //System.out.println(test.rightMostRoom.peek().x);
