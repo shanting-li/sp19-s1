@@ -103,7 +103,7 @@ public class Game {
         }
     }
 
-    private Position randomStart(int seed) {
+    private Position randomStart(long seed) {
         Random RANDOM = new Random(seed);
         Position ans = new Position(0, 0);
         ans.x = 2 + RANDOM.nextInt(WIDTH / 15);
@@ -996,7 +996,7 @@ public class Game {
         input = input.toLowerCase();
         String seed = "";
         int moveIndex = 0;
-        int seedNum = 0;
+        long seedNum = 0;
         Position start;
         Position moved;
 
@@ -1013,7 +1013,7 @@ public class Game {
             }
             // 2. use the seed to get a start point and draw a new world
             initializeWorld();
-            seedNum = Integer.parseInt(seed);
+            seedNum = Long.parseLong(seed);
             start = randomStart(seedNum);
 
             setWorld(start, Tileset.WALL, Tileset.GRASS);
