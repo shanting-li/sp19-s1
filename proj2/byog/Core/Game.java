@@ -1108,7 +1108,6 @@ public class Game implements Serializable{
         }
 
         finalWorldFrame = world;
-        world = null;
 
         return finalWorldFrame;
     }
