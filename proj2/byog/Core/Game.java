@@ -1088,6 +1088,11 @@ public class Game implements Serializable{
             // the point the player get to,
             // the start point and win point of the maze,
             // and whether the player has already won.
+            try {
+                DeServializePerson();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             moveStart = savedEnd.peek();
             world = savedFiles.peek();
             newStart = savedNewStart.peek();

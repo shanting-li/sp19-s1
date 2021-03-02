@@ -275,7 +275,8 @@ public class TestPhase1 {
         //2.test load 接替
         TETile[][] world = test.playWithInputString("n3415218040718096461ssdsddaddaad");
         //TETile[][] world2 = test.playWithInputString("n3415218040718096461ssdsddaddaad");
-        TETile[][] world2 = test.playWithInputString("n3415218040718096461ssdsddaddaad:q");
+        TETile[][] world2 = test.playWithInputString("n3415218040718096461ssdsddaddaa:q");
+        world2 = test.playWithInputString("ld");
         //s1, pass
         /*test.playWithInputString("N5001SDDD");
         TETile[][] world2 = test.playWithInputString("N999001SDDD:Q");
