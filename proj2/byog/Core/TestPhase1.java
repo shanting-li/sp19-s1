@@ -273,9 +273,9 @@ public class TestPhase1 {
         System.out.println(Arrays.deepEquals(world, world2));*/
 
         //2.test load 接替
-        TETile[][] world = test.playWithInputString("n3415218040718096461ssdsddaddaad");
-        //TETile[][] world2 = test.playWithInputString("n3415218040718096461ssdsddaddaa:q");
-        //world2 = test.playWithInputString("ld");
+        //TETile[][] world = test.playWithInputString("n3415218040718096461ssdsddaddaad");
+        TETile[][] world2 = test.playWithInputString("n3415218040718096461ssdsddaddaa:q");
+        world2 = test.playWithInputString("ld");
         //s1, pass
         /*test.playWithInputString("N5001SDDD");
         TETile[][] world2 = test.playWithInputString("N999001SDDD:Q");
@@ -301,8 +301,8 @@ public class TestPhase1 {
         }*/
         /*boolean a = Arrays.deepEquals(world, world2);
         System.out.println(a);*/
-        ter.renderFrame(world);
-        //ter.renderFrame(world2);
+        //ter.renderFrame(world);
+        ter.renderFrame(world2);
 
 
 
