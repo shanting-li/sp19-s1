@@ -1,13 +1,22 @@
 package byog.Core;
 
+import edu.princeton.cs.introcs.StdDraw;
+import java.awt.Color;
+
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 import byog.lab5.Position;
+
+import java.awt.*;
 import java.util.Stack;
 import java.util.Random;
 
-public class Game {
+import java.io.*;
+
+public class Game implements Serializable{
+    private static final long serialVersionUID = 1L;
+
     TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
@@ -19,15 +28,33 @@ public class Game {
     private static final int roomMax = 8;
     private static final int roomMin = 4;
 
-    // the top element of savedFiles is the world saved last time
-    private TETile[][] world;
+
+    // the top element is the world saved last time
     private Stack<TETile[][]> savedFiles = new Stack<>();
 
-    //the top element of savedStart is the end point saved last time
+    //the top element is the point where the player finally get saved last time
     private Stack<Position> savedEnd = new Stack<>();
 
+    //the top element is the original start point of the maze saved last time
+    private Stack<Position> savedNewStart = new Stack<>();
+
+    //the top element is the win point of the maze saved last time
+    private Stack<Position> savedLockedDoor = new Stack<>();
+
+    //the top element is the win situation of the maze saved last time
+    private Stack<Boolean> savedWin = new Stack<>();
+
+    //the world of a new game
+    public TETile[][] world;
     //the start point of a new game
     private Position newStart;
+    //the win point of a new game
+    private Position lockedDoor;
+    private boolean IsWin = false;
+    private boolean playerTurn = false;
+    private Random RANDOM;
+    private final String[] rightTip = {"Keep moving!", "You are win!"};
+    private boolean gameOver = false;
 
     //when drawing a room, one need to choose a side of it randomly
     private String side = "right";
@@ -37,14 +64,8 @@ public class Game {
 
     // keep track of the last shape drawn, a room or a hallway.
     private Stack<String> swayRecord = new Stack<>();
-    private Random RANDOM;
 
 
-    /**
-     * Method used for playing a fresh game. The game should start from the main menu.
-     */
-    public void playWithKeyboard() {
-    }
 
     /**
      * Method used for autograding and testing the game code. The input string will be a series
@@ -58,11 +79,7 @@ public class Game {
      * @param input the input string to feed to your program
      * @return the 2D TETile[][] representing the state of the world
      */
-    /** 以:q结尾，return当前世界，且会保存这个世界和玩家玩到哪里了，此时再输入l要能返回之前那个界面(stack)
-     * :q 结束程序
-     * w上，s下，a左，d右
-     * 以n开始，一串数字指定seed，以s结尾确定seed
-     */
+
 
     /** PART A AID FUNCTIONS
      * */
@@ -95,7 +112,7 @@ public class Game {
      * the function of the place position is to ensure the rightmost will not become empty
      * due to pop()
      */
-    private void initializeWorld() {
+    public void initializeWorld() {
         world = new TETile[WIDTH][HEIGHT];
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
@@ -1024,20 +1041,23 @@ public class Game {
            if starting with n, get the seed and the start point
            then draw a new world
          * if starting with l, load the last game */
+
+        //1 initialize swayRecord, finalWorldFrame and rightmost
         swayRecord.push("");
         TETile[][] finalWorldFrame;
         initializeRightMost();
-        //System.out.println(rightMostRoom.peek().x);
+
+        //2 deal with the input
 
         input = input.toLowerCase();
         String seed = "";
         int moveIndex = 0;
         long seedNum = 0;
-        Position start;
-        Position moved;
+        Position moveStart;
 
+        //2.1 if n, get the seed and create new world
         if (input.charAt(0) == 'n') {
-            // 1. get the seed
+            // get the seed
             for (int i = 1; i < input.length(); i++) {
                 char item = input.charAt(i);
                 if (Character.isDigit(item)) {
@@ -1047,86 +1067,185 @@ public class Game {
                     break;
                 }
             }
-            // 2. use the seed to get a start point and draw a new world
+            // initialize world, seed and random array
             initializeWorld();
             seedNum = Long.parseLong(seed);
             RANDOM = new Random(seedNum);
-            start = randomStart();
 
-            setWorld(start, Tileset.WALL, Tileset.GRASS);
-            start = new Position(newStart.x, newStart.y);
-            // finalWorldFrame[start.x][start.y] = Tileset.SAND; // for test
+            // create world, the start point and win point of the maze
+            setWorld(randomStart(), Tileset.WALL, Tileset.GRASS);
+            chooseDoor();
 
-            // 3. move the point and save files according to the rest words
-            inputAfterSeed(input, world, start, moveIndex);
+            // move the point according to the rest words, saving the maze if necessary
+            moveStart = new Position(newStart.x, newStart.y);
+            world[moveStart.x][moveStart.y] = Tileset.FLOWER; // flower represents the player
+            inputAfterSeed(input, moveIndex, moveStart);
 
         } else if (input.charAt(0) == 'l' && (!savedFiles.isEmpty())
                 && (!savedEnd.isEmpty())) {
-            // 1 get the world and start point last time
-            finalWorldFrame = savedFiles.peek();
-            start = savedEnd.peek();
-            moveIndex = 1;
+            // 1 get the information of the last maze
+            // including the world,
+            // the point the player get to,
+            // the start point and win point of the maze,
+            // and whether the player has already won.
+            moveStart = savedEnd.peek();
+            world = savedFiles.peek();
+            newStart = savedNewStart.peek();
+            lockedDoor = savedLockedDoor.peek();
+            IsWin = savedWin.peek();
 
             // 2. move the point and save files according to the rest words
-            inputAfterSeed(input, finalWorldFrame, start, moveIndex);
+            moveIndex = 1;
+            inputAfterSeed(input, moveIndex, moveStart);
 
         } else {
             initializeWorld();
         }
+
         finalWorldFrame = world;
         world = null;
+
         return finalWorldFrame;
     }
 
-    private boolean checkInMaze(Position p, TETile[][] world) {
+    private boolean isCorner(Position p) {
+        Position lP = new Position(p.x - 1, p.y);
+        Position rP = new Position(p.x + 1, p.y);
+        Position uP = new Position(p.x, p.y + 1);
+        Position dP = new Position(p.x, p.y - 1);
+
+        if(PosValid(lP) && PosValid(uP)) {
+            boolean lu = world[p.x][p.y].equals(Tileset.WALL)
+                    && world[lP.x][lP.y].equals(Tileset.WALL)
+                    && world[uP.x][uP.y].equals(Tileset.WALL);
+            if(lu) {
+                return true;
+            }
+        }
+        if(PosValid(rP) && PosValid(uP)) {
+            boolean ru = world[p.x][p.y].equals(Tileset.WALL)
+                    && world[rP.x][rP.y].equals(Tileset.WALL)
+                    && world[uP.x][uP.y].equals(Tileset.WALL);
+            if(ru) {
+                return true;
+            }
+        }
+        if(PosValid(lP) && PosValid(dP)) {
+            boolean ld = world[p.x][p.y].equals(Tileset.WALL)
+                    && world[lP.x][lP.y].equals(Tileset.WALL)
+                    && world[dP.x][dP.y].equals(Tileset.WALL);
+            if(ld) {
+                return true;
+            }
+        }
+        if(PosValid(rP) && PosValid(dP)) {
+            boolean rd = world[p.x][p.y].equals(Tileset.WALL)
+                    && world[rP.x][rP.y].equals(Tileset.WALL)
+                    && world[dP.x][dP.y].equals(Tileset.WALL);
+            if(rd) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void chooseDoor() {
+        lockedDoor = new Position(WIDTH - 1, HEIGHT - 1);
+
+        int count = 0;
+        boolean loopFailed = false;
+
+        while(!(PosValid(lockedDoor)
+                && (world[lockedDoor.x][lockedDoor.y].equals(Tileset.WALL))
+                && (!isCorner(lockedDoor)))) {
+            lockedDoor.x = RANDOM.nextInt(WIDTH);
+            lockedDoor.y = RANDOM.nextInt(HEIGHT);
+            count ++;
+            if(count > 1000) {
+                loopFailed = true;
+                break;
+            }
+        }
+        if(loopFailed) {
+            lockedDoor.x = newStart.x;
+            lockedDoor.y = newStart.y;
+            IsWin = true;
+        }
+        world[lockedDoor.x][lockedDoor.y] = Tileset.SAND;
+
+    }
+
+    private boolean checkInMaze(Position p) {
         try {
-            return !((world[p.x][p.y].equals(Tileset.NOTHING)));
+            return (world[p.x][p.y].equals(Tileset.GRASS)
+                    || world[p.x][p.y].equals(Tileset.SAND));
         } catch (ArrayIndexOutOfBoundsException e) {
             return false;
         }
     }
-    private void inputAfterSeed (String input, TETile[][] finalWorldFrame,
-                             Position start, int moveIndex) {
+
+    private void helpPlayerShift(Position test, Position moved, char shift) {
+        if(checkInMaze(test)) {
+            //if player can move, change the present tile
+            if(moved.x == newStart.x && moved.y == newStart.y) {
+                world[moved.x][moved.y] = Tileset.WALL;
+            } else if(moved.x != lockedDoor.x || moved.y != lockedDoor.y){
+                world[moved.x][moved.y] = Tileset.GRASS;
+
+            }
+
+            //change player's position
+            if(shift == 'w' || shift =='s') {
+                moved.y = test.y;
+            } else {
+                moved.x = test.x;
+            }
+
+            //change new position's tile after moving
+            if(moved.x == lockedDoor.x && moved.y == lockedDoor.y) {
+                IsWin = true;
+            } else {
+                world[moved.x][moved.y] = Tileset.FLOWER;
+            }
+        }
+    }
+    private void playerShift(Position test, Position moved, char item) {
+        switch (item) {
+            case 'w':
+                test.x = moved.x;
+                test.y = moved.y + 1;
+                helpPlayerShift(test, moved, 'w');
+                break;
+            case 's':
+                test.x = moved.x;
+                test.y = moved.y - 1;
+                helpPlayerShift(test, moved, 's');
+                break;
+            case 'a':
+                test.x = moved.x - 1;
+                test.y = moved.y;
+                helpPlayerShift(test, moved, 'a');
+                break;
+            case 'd':
+                test.x = moved.x + 1;
+                test.y = moved.y;
+                helpPlayerShift(test, moved, 'd');
+                break;
+        }
+    }
+    private void inputAfterSeed (String input, int moveIndex, Position gameStart) {
         if (moveIndex < input.length()) {
             input = input.toLowerCase();
             Position moved;
             boolean fileSave = false;
 
-            moved = new Position(start.x, start.y);
+            moved = new Position(gameStart.x, gameStart.y);
             Position test = new Position(0, 0);
 
-            for (int i = moveIndex; i < input.length(); i++) {
+            for(int i = moveIndex; i < input.length(); i++) {
                 char item = input.charAt(i);
+                playerShift(test, moved, item);
                 switch (item) {
-                    case 'w':
-                        test.x = moved.x;
-                        test.y = moved.y + 1;
-                        if (checkInMaze(test, finalWorldFrame)) {
-                            moved.y = test.y;
-                        }
-                        break;
-                    case 's':
-                        test.x = moved.x;
-                        test.y = moved.y - 1;
-                        if (checkInMaze(test, finalWorldFrame)) {
-                            moved.y = test.y;
-                        }
-
-                        break;
-                    case 'a':
-                        test.x = moved.x - 1;
-                        test.y = moved.y;
-                        if (checkInMaze(test, finalWorldFrame)) {
-                            moved.x = test.x;
-                        }
-                        break;
-                    case 'd':
-                        test.x = moved.x + 1;
-                        test.y = moved.y;
-                        if (checkInMaze(test, finalWorldFrame)) {
-                            moved.x = test.x;
-                        }
-                        break;
                     case ':':
                         break;
                     case 'q':
@@ -1134,14 +1253,273 @@ public class Game {
                 }
             }
 
-            finalWorldFrame[moved.x][moved.y] = Tileset.SAND;
             if (fileSave) {
-                savedEnd.push(moved);
-                savedFiles.push(finalWorldFrame);
+                saveMaze(moved);
+            }
+        }
+    }
+    private void saveMaze(Position moved) {
+        savedEnd.push(moved);
+        savedFiles.push(world);
+        savedLockedDoor.push(lockedDoor);
+        savedNewStart.push(newStart);
+        savedWin.push(IsWin);
+        try {
+            ServializeGame();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * PART F playWithKeyboard
+     * Method used for playing a fresh game. The game should start from the main menu.
+     */
+    public void playWithKeyboard() {
+        /*
+          1 创建一个游戏窗口
+          2 随机生成target string
+          3 逐个字符地在游戏窗口上显示target string
+          4 等待玩家输入足够多的字符
+          5 如果玩家输入的string和target string匹配（如果target string更长不算匹配），则回到第二步
+        */
+        TETile[][] basic = new TETile[WIDTH][HEIGHT];
+        for (int x = 0; x < WIDTH; x += 1) {
+            for (int y = 0; y < HEIGHT; y += 1) {
+                basic[x][y] = Tileset.NOTHING;
             }
         }
 
+        while(!gameOver) {
+            //1 create the start window
+            gameRenderer startWin = new gameRenderer();
+            startWin.initialize(basic);
+            startWin.renderUI();
 
+            StdDraw.pause(3000);
+
+            //2 if the player enter n,l,q
+            String playerOrder = "";
+            if(StdDraw.hasNextKeyTyped()) {
+                playerOrder += StdDraw.nextKeyTyped();
+            }
+
+            // if one enter q, end the game
+            if(playerOrder.equals("q")) {
+                gameOver = true;
+                break;
+            } else { // if one enter n or l, create and show a maze
+                Position gameStart = renderOriginalWorld(startWin, playerOrder);
+
+                //3 let the player move in the maze
+                Position moved = new Position(gameStart.x, gameStart.y);
+                Position test = new Position(0, 0);
+
+                playerTurn = true;
+                char item;
+                StdDraw.pause(3000);
+
+                while(playerTurn) {
+                    while(StdDraw.hasNextKeyTyped()) {
+                        item = StdDraw.nextKeyTyped();
+                        if (item == 'q') {
+                            saveMaze(moved);
+                            gameOver = true;
+                            break;
+                        } else {
+                            playerShift(test, moved, item);
+                            startWin.renderMaze(world, mouse(startWin), winTip());
+                            StdDraw.pause(1000);
+                        }
+                    }
+                    if(!gameOver) {
+                        playerTurn = false;
+                        StdDraw.pause(5000);
+                        startWin.renderMaze(world, mouse(startWin), "Time is up!");
+                    } else {
+                        break;
+                    }
+                }
+                // if the player use out time, then back to the start window
+                world = null;
+                StdDraw.pause(2000);
+            }
+        }
+
+        //if the player enter q during their moving in the maze, then save and end the game
+        gameRenderer gameIsOVer = new gameRenderer();
+        gameIsOVer.initialize(basic);
+        if(IsWin) {
+            gameIsOVer.renderWin();
+        } else {
+            gameIsOVer.renderOver();
+        }
+
+    }
+
+    /** clear useless input by the player*/
+    private void clearKeyTyped() {
+        while(StdDraw.hasNextKeyTyped()) {
+            StdDraw.nextKeyTyped();
+        }
+    }
+    /** if one point is under mouse press, the change the left tips on the window */
+    private String mouse(gameRenderer startWin) {
+        String ans = "Click the tile";
+
+        int tipX;
+        int tipY;
+        if(StdDraw.isMousePressed()) {
+            tipX = (int) (StdDraw.mouseX());
+            tipY= (int) (StdDraw.mouseY());
+            if(world[tipX][tipY].equals(Tileset.WALL)) {
+                ans = "Wall";
+            } else if(world[tipX][tipY].equals(Tileset.SAND)) {
+                ans = "Locked door";
+            } else if(world[tipX][tipY].equals(Tileset.FLOWER)) {
+                ans = "You are here";
+            } else if(world[tipX][tipY].equals(Tileset.GRASS)) {
+                ans = "Floor";
+            } else {
+                ans = "Outside";
+            }
+            startWin.renderMaze(world, ans, winTip());
+        }
+
+        return ans;
+
+    }
+    /** if one has won, then show " you are win", otherwise "keep moving */
+    private String winTip() {
+        String rightTemp = "";
+        if(IsWin) {
+            rightTemp = rightTip[1];
+        } else {
+            rightTemp = rightTip[0];
+        }
+        return rightTemp;
+    }
+    /** if one enter n, then show a new maze; otherwise load and show the saved maze */
+    private Position renderOriginalWorld(gameRenderer startWin,
+                                         String playerOrder) {
+        Position moveStart;
+
+        switch (playerOrder.charAt(playerOrder.length() - 1)) {
+            case 'l': {
+                // 1.render the original window
+                startWin.renderUISel("l");
+
+                // 2.load the last saved maze / world
+                try {
+                    DeServializePerson();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                moveStart = savedEnd.peek();
+                //maze and newStart
+                world = savedFiles.peek();
+                //win point
+                lockedDoor = savedLockedDoor.peek();
+                //move start
+                newStart = savedNewStart.peek();
+                IsWin = savedWin.peek();
+
+                // 3.render the maze / world
+                startWin.renderMaze(world, mouse(startWin), winTip());
+                return moveStart;
+            }
+            default: {
+                // 1.render the original window
+
+                startWin.renderUISel("n");
+                StdDraw.pause(500);
+                startWin.renderSeed();
+
+
+                // 2.get seed
+                playerTurn = true;
+                String seedStr = "";
+                long seed;
+                while (playerTurn) {
+                    while (StdDraw.hasNextKeyTyped()) {
+                        char temp;
+                        temp = StdDraw.nextKeyTyped();
+                        if (Character.isDigit(temp)) {
+                            seedStr += temp;
+                            startWin.renderSeed(seedStr);
+                            StdDraw.pause(100);
+                        } else if (temp == 's') {
+                            playerTurn = false;
+                            break;
+                        } else {
+                            StdDraw.nextKeyTyped();
+                        }
+                    }
+                    StdDraw.pause(500);
+                }
+                clearKeyTyped();
+                seed = Integer.parseInt(seedStr);
+
+
+                // 3.create a maze / world
+                initializeWorld();
+                RANDOM = new Random(seed);
+                //initialize variables
+                swayRecord.push("");
+                TETile[][] finalWorldFrame;
+                initializeRightMost();
+                //maze and newStart
+                setWorld(randomStart(), Tileset.WALL, Tileset.GRASS);
+                //win point
+                chooseDoor();
+                //move start
+                moveStart = new Position(newStart.x, newStart.y);
+                world[moveStart.x][moveStart.y] = Tileset.FLOWER;
+
+
+                // 4.render the maze / world
+                startWin.renderMaze(world, mouse(startWin), winTip());
+                return moveStart;
+            }
+
+        }
+    }
+    /** save the game as a local file */
+    private void ServializeGame() throws IOException {
+        ObjectOutputStream oo = new ObjectOutputStream(
+                new FileOutputStream(new File("game.txt")));
+
+        Game saved = new Game();
+        saved.savedFiles = this.savedFiles;
+        saved.savedEnd = this.savedEnd;
+        saved.savedNewStart = this.savedNewStart;
+        saved.savedLockedDoor = this.savedLockedDoor;
+        saved.savedWin = this.savedWin;
+
+        oo.writeObject(this);
+        oo.close();
+    }
+    /** read the game from a local file */
+    public void DeServializePerson() throws IOException {
+        ObjectInputStream oo = new ObjectInputStream(
+                new FileInputStream(new File("game.txt")));
+
+        Game load = new Game();
+
+        try {
+            load = (Game) oo.readObject();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        this.savedFiles = load.savedFiles;
+        this.savedEnd = load.savedEnd;
+        this.savedNewStart = load.savedNewStart;
+        this.savedLockedDoor = load.savedLockedDoor;
+        this.savedWin = load.savedWin;
+
+        oo.close();
     }
 
 }

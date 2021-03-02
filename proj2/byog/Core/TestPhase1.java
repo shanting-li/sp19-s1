@@ -1,5 +1,9 @@
 package byog.Core;
 
+import edu.princeton.cs.introcs.StdDraw;
+
+import java.awt.*;
+
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
@@ -9,7 +13,7 @@ import java.util.Arrays;
 import java.util.Stack;
 import java.util.Random;
 
-public class TestGame {
+public class TestPhase1 {
     /*public static void testIniWorld() {
         Game test = new Game();
         TETile[][] world = test.initializeWorld();
@@ -238,30 +242,59 @@ public class TestGame {
         ter.renderFrame(world);
     }*/
 
-    public static void testAll() {
+    public static void testChooseDoor() {
         Game test = new Game();
 
         TERenderer ter = new TERenderer();
         ter.initialize(test.WIDTH, test.HEIGHT);
 
-        String input1 = "n123sss";//pass
+        ter.renderFrame(test.playWithInputString("N969001SDDDWWWDDD"));
+        ter.renderFrame(test.playWithInputString("N9SDDDWWWDDD"));
+        ter.renderFrame(test.playWithInputString("N91001SDDDWWWDDD"));
+    }
+
+    public static void testAllString() {
+        Game test = new Game();
+
+        TERenderer ter = new TERenderer();
+        ter.initialize(test.WIDTH, test.HEIGHT);
+
+        //1.test single time
+        /*String input1 = "n123sss";//pass
         input1 ="n18823swwwwwwwwwwddddddddddd";//pass
         input1 ="n9223372036854775806s";//pass
         input1 ="n999378s";//pass
         input1 ="n954378s";//pass
-        input1 ="n331s";//pass
-        input1 ="n5s";//pass
+        input1 ="n331s:q";//pass
+        //input1 ="n5swwwwwwwwwwwwwwwddddddd:Q";//pass
+        String input2 = "L";//pass
         TETile[][] world = test.playWithInputString(input1);
-        ter.renderFrame(world);
-        /*for(int i = 2; i < 200; i++) {
-            TETile[][] world = test.playWithInputString("n" + String.valueOf(i) + "s");
-            System.out.println(i);
-            //ter.renderFrame(world);
-        }*/
+        TETile[][] world2 = test.playWithInputString(input2);
+        System.out.println(Arrays.deepEquals(world, world2));*/
+
+        //2.test load 接替
+        TETile[][] world = test.playWithInputString("N999001SDDDWWWDDD");
+
+        //s1, pass
+        test.playWithInputString("N5001SDDD");
+        TETile[][] world2 = test.playWithInputString("N999001SDDD:Q");
+        world2 = test.playWithInputString("LWWWDDD");
+
+        //s2, pass
+        /*TETile[][] world2 = test.playWithInputString("N999SDDD:Q");
+        world2 = test.playWithInputString("LWWW:Q");
+        world2 = test.playWithInputString("LDDD:Q");*/
+
+        //s3, pass
+        /*TETile[][] world2 = test.playWithInputString("N999SDDD:Q");
+        world2 = test.playWithInputString("L:Q");
+        world2 = test.playWithInputString("L:Q");
+        world2 = test.playWithInputString("LWWWDDD");*/
+
+        System.out.println(Arrays.deepEquals(world, world2));
+        ter.renderFrame(world2);
 
 
-
-        //System.out.println(test.rightMostRoom.peek().x);
 
 
         // test save
@@ -299,6 +332,8 @@ public class TestGame {
 
     }
 
+
+
     public static void main(String[] args) {
         //testIniWorld();
         //testRandomStart();
@@ -307,11 +342,13 @@ public class TestGame {
         //testPosValid();
         //testPosSideValid();
         //testSetRightMost();
-
-
         //testSetRoomWay();
         //testShiftStart();
-        testAll();
+        testAllString();
+        //testGenTip();
+
+
+
 
 
 
