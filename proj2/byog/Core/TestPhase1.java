@@ -273,12 +273,13 @@ public class TestPhase1 {
         System.out.println(Arrays.deepEquals(world, world2));*/
 
         //2.test load 接替
-        TETile[][] world = test.playWithInputString("N999001SDDDWWWDDD");
-
+        TETile[][] world = test.playWithInputString("n3415218040718096461ssdsddaddaad");
+        //TETile[][] world2 = test.playWithInputString("n3415218040718096461ssdsddaddaad");
+        TETile[][] world2 = test.playWithInputString("n3415218040718096461ssdsddaddaad");
         //s1, pass
-        test.playWithInputString("N5001SDDD");
+        /*test.playWithInputString("N5001SDDD");
         TETile[][] world2 = test.playWithInputString("N999001SDDD:Q");
-        world2 = test.playWithInputString("LWWWDDD");
+        world2 = test.playWithInputString("LWWWDDD");*/
 
         //s2, pass
         /*TETile[][] world2 = test.playWithInputString("N999SDDD:Q");
@@ -291,7 +292,15 @@ public class TestPhase1 {
         world2 = test.playWithInputString("L:Q");
         world2 = test.playWithInputString("LWWWDDD");*/
 
-        System.out.println(Arrays.deepEquals(world, world2));
+        for(int x = 0; x < test.WIDTH; x++) {
+            for(int y = 0; y < test.HEIGHT; y++) {
+                if(!(world[x][y].equals(world2[x][y]))) {
+                    System.out.println("world is: " + world[x][y] + " world2 is: " + world2[x][y]);
+                }
+            }
+        }
+        //boolean a = Arrays.deepEquals(world, world2);
+        //System.out.println(a);
         ter.renderFrame(world2);
 
 
