@@ -273,24 +273,28 @@ public class TestPhase1 {
         System.out.println(Arrays.deepEquals(world, world2));*/
 
         //2.test load 接替
-        //TETile[][] world = test.playWithInputString("n3415218040718096461ssdsddaddaad");
+        /*TETile[][] world = test.playWithInputString("n3415218040718096461ssdsddaddaad");
         TETile[][] world2 = test.playWithInputString("n3415218040718096461ssdsddaddaa:q");
-        world2 = test.playWithInputString("ld");
+        world2 = test.playWithInputString("ld");*/
         //s1, pass
-        /*test.playWithInputString("N5001SDDD");
-        TETile[][] world2 = test.playWithInputString("N999001SDDD:Q");
+        /*TETile[][] world = test.playWithInputString("N19900111111111111SDDDWWWDDD");
+        //test.playWithInputString("N5001SDDD");
+        TETile[][] world2 = test.playWithInputString("N19900111111111111SDDD:q");
         world2 = test.playWithInputString("LWWWDDD");*/
 
         //s2, pass
-        /*TETile[][] world2 = test.playWithInputString("N999SDDD:Q");
+        /*TETile[][] world = test.playWithInputString("N999SDDDWWWDDD");
+        //Game test2 = new Game();
+        TETile[][] world2 = test.playWithInputString("N999SDDD:q");
         world2 = test.playWithInputString("LWWW:Q");
         world2 = test.playWithInputString("LDDD:Q");*/
 
         //s3, pass
-        /*TETile[][] world2 = test.playWithInputString("N999SDDD:Q");
+        TETile[][] world = test.playWithInputString("N999SDDDWWWDDD");
+        TETile[][] world2 = test.playWithInputString("N999SDDD:Q");
         world2 = test.playWithInputString("L:Q");
         world2 = test.playWithInputString("L:Q");
-        world2 = test.playWithInputString("LWWWDDD");*/
+        world2 = test.playWithInputString("LWWWDDD");
 
         /*for(int x = 0; x < test.WIDTH; x++) {
             for(int y = 0; y < test.HEIGHT; y++) {
@@ -299,8 +303,8 @@ public class TestPhase1 {
                 }
             }
         }*/
-        /*boolean a = Arrays.deepEquals(world, world2);
-        System.out.println(a);*/
+        boolean a = Arrays.deepEquals(world, world2);
+        System.out.println(a);
         //ter.renderFrame(world);
         ter.renderFrame(world2);
 

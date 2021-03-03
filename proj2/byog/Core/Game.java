@@ -125,7 +125,7 @@ public class Game implements Serializable{
         Position ans = new Position(0, 0);
         ans.x = 2 + RANDOM.nextInt(WIDTH / 15);
         ans.y = 2 + RANDOM.nextInt(HEIGHT / 15);
-
+        //System.out.println(ans.x + " " + ans.y);
         return ans;
     }
 
@@ -165,6 +165,7 @@ public class Game implements Serializable{
             rightMostRoom.push(p3);
             pos.push(p2);
             pos.push(p1);
+            //System.out.println(rightMostRoom.peek().x);
         }
 
     }
@@ -601,7 +602,7 @@ public class Game implements Serializable{
 
         int count = 0;
         while (!(PosSideValid(ans, target))) {
-            if (count < 1000) {
+            if (count < 10) {
                 ans = helpSetPtOnRoom(startX, endX, startY, endY);
                 count++;
             } else {
@@ -922,7 +923,7 @@ public class Game implements Serializable{
 
         int count = 0;
         while (!(PosSideValid(ans, target))) {
-            if (count < 1000) {
+            if (count < 10) {
                 ans = helpSetPtOnWay(leftX, rightX, btY, topY, modStart);
                 count++;
             } else {
@@ -970,6 +971,7 @@ public class Game implements Serializable{
             return;
         } else {
             start = updateStart(start, wallTile, flTile);
+            //System.out.println(start.x);
             setWorld(start, wallTile, flTile);
         }
     }
@@ -990,6 +992,7 @@ public class Game implements Serializable{
         if (swayRecord.peek().equals("room")) {
             // draw a hallway
             Stack<Position> diaPoint = setWay(wallTile, flTile, start);
+            //System.out.println(diaPoint.peek().x);
 
             //try to choose a new random point on the way drawn just now
             //if get an infinite loop, choose a new random point on the rightmost way
@@ -1006,6 +1009,7 @@ public class Game implements Serializable{
         } else {
             // draw a room
             Stack<Position> diaPoint = setRoom(wallTile, flTile, start);
+            //System.out.println(diaPoint.peek().x);
 
             //try to choose a new random point on the room drawn just now
             //if get an infinite loop, choose a new random point on the rightmost room
@@ -1070,6 +1074,7 @@ public class Game implements Serializable{
             // initialize world, seed and random array
             initializeWorld();
             seedNum = Long.parseLong(seed);
+            //System.out.println(seedNum);
             RANDOM = new Random(seedNum);
 
             // create world, the start point and win point of the maze
@@ -1108,10 +1113,37 @@ public class Game implements Serializable{
         }
 
         finalWorldFrame = world;
+        clearStringGame();
 
         return finalWorldFrame;
     }
 
+
+    private void chooseDoor() {
+        lockedDoor = new Position(WIDTH - 1, HEIGHT - 1);
+
+        int count = 0;
+        boolean loopFailed = false;
+
+        while(!(PosValid(lockedDoor)
+                && (world[lockedDoor.x][lockedDoor.y].equals(Tileset.WALL))
+                && (!isCorner(lockedDoor)))) {
+            lockedDoor.x = RANDOM.nextInt(WIDTH);
+            lockedDoor.y = RANDOM.nextInt(HEIGHT);
+            count ++;
+            if(count > 1000) {
+                loopFailed = true;
+                break;
+            }
+        }
+        if(loopFailed) {
+            lockedDoor.x = newStart.x;
+            lockedDoor.y = newStart.y;
+            IsWin = true;
+        }
+        world[lockedDoor.x][lockedDoor.y] = Tileset.SAND;
+
+    }
     private boolean isCorner(Position p) {
         Position lP = new Position(p.x - 1, p.y);
         Position rP = new Position(p.x + 1, p.y);
@@ -1153,63 +1185,30 @@ public class Game implements Serializable{
         return false;
     }
 
-    private void chooseDoor() {
-        lockedDoor = new Position(WIDTH - 1, HEIGHT - 1);
+    private void inputAfterSeed (String input, int moveIndex, Position gameStart) {
+        if (moveIndex < input.length()) {
+            input = input.toLowerCase();
+            Position moved;
+            boolean fileSave = false;
 
-        int count = 0;
-        boolean loopFailed = false;
+            moved = new Position(gameStart.x, gameStart.y);
+            Position test = new Position(0, 0);
 
-        while(!(PosValid(lockedDoor)
-                && (world[lockedDoor.x][lockedDoor.y].equals(Tileset.WALL))
-                && (!isCorner(lockedDoor)))) {
-            lockedDoor.x = RANDOM.nextInt(WIDTH);
-            lockedDoor.y = RANDOM.nextInt(HEIGHT);
-            count ++;
-            if(count > 1000) {
-                loopFailed = true;
-                break;
-            }
-        }
-        if(loopFailed) {
-            lockedDoor.x = newStart.x;
-            lockedDoor.y = newStart.y;
-            IsWin = true;
-        }
-        world[lockedDoor.x][lockedDoor.y] = Tileset.SAND;
-
-    }
-
-    private boolean checkInMaze(Position p) {
-        try {
-            return (world[p.x][p.y].equals(Tileset.GRASS)
-                    || world[p.x][p.y].equals(Tileset.SAND));
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return false;
-        }
-    }
-
-    private void helpPlayerShift(Position test, Position moved, char shift) {
-        if(checkInMaze(test)) {
-            //if player can move, change the present tile
-            if(moved.x == newStart.x && moved.y == newStart.y) {
-                world[moved.x][moved.y] = Tileset.WALL;
-            } else if(moved.x != lockedDoor.x || moved.y != lockedDoor.y){
-                world[moved.x][moved.y] = Tileset.GRASS;
-
+            for(int i = moveIndex; i < input.length(); i++) {
+                char item = input.charAt(i);
+                playerShift(test, moved, item);
+                switch (item) {
+                    case ':':
+                        break;
+                    case 'q':
+                        fileSave = true;
+                        i = input.length();
+                        break;
+                }
             }
 
-            //change player's position
-            if(shift == 'w' || shift =='s') {
-                moved.y = test.y;
-            } else {
-                moved.x = test.x;
-            }
-
-            //change new position's tile after moving
-            if(moved.x == lockedDoor.x && moved.y == lockedDoor.y) {
-                IsWin = true;
-            } else {
-                world[moved.x][moved.y] = Tileset.FLOWER;
+            if (fileSave) {
+                saveMaze(moved);
             }
         }
     }
@@ -1237,37 +1236,62 @@ public class Game implements Serializable{
                 break;
         }
     }
-    private void inputAfterSeed (String input, int moveIndex, Position gameStart) {
-        if (moveIndex < input.length()) {
-            input = input.toLowerCase();
-            Position moved;
-            boolean fileSave = false;
+    private void helpPlayerShift(Position test, Position moved, char shift) {
+        if(checkInMaze(test)) {
+            //if player can move, change the present tile
+            if(moved.x == newStart.x && moved.y == newStart.y) {
+                world[moved.x][moved.y] = Tileset.WALL;
+            } else if(moved.x != lockedDoor.x || moved.y != lockedDoor.y){
+                world[moved.x][moved.y] = Tileset.GRASS;
 
-            moved = new Position(gameStart.x, gameStart.y);
-            Position test = new Position(0, 0);
-
-            for(int i = moveIndex; i < input.length(); i++) {
-                char item = input.charAt(i);
-                playerShift(test, moved, item);
-                switch (item) {
-                    case ':':
-                        break;
-                    case 'q':
-                        fileSave = true;
-                }
             }
 
-            if (fileSave) {
-                saveMaze(moved);
+            //change player's position
+            if(shift == 'w' || shift =='s') {
+                moved.y = test.y;
+            } else if(shift == 'a' || shift =='d'){
+                moved.x = test.x;
+            }
+
+            //change new position's tile after moving
+            if(moved.x == lockedDoor.x && moved.y == lockedDoor.y) {
+                IsWin = true;
+            } else {
+                world[moved.x][moved.y] = Tileset.FLOWER;
             }
         }
     }
+    private boolean checkInMaze(Position p) {
+        try {
+            return (world[p.x][p.y].equals(Tileset.GRASS)
+                    || world[p.x][p.y].equals(Tileset.SAND));
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return false;
+        }
+    }
+
     private void saveMaze(Position moved) {
-        savedEnd.push(moved);
+        Position savedMoved = new Position(moved.x, moved.y);
+        Position savedNewS = new Position(newStart.x, newStart.y);
+        Position savedDoor = new Position(lockedDoor.x, lockedDoor.y);
+
+        savedEnd.push(savedMoved);
         savedFiles.push(world);
-        savedLockedDoor.push(lockedDoor);
-        savedNewStart.push(newStart);
+        savedLockedDoor.push(savedDoor);
+        savedNewStart.push(savedNewS);
         savedWin.push(IsWin);
+    }
+    private void clearStringGame() {
+        world = null;
+        RANDOM = null;
+        newStart = null;
+        lockedDoor = null;
+        rightMostRoom = null;
+        IsWin = false;
+        playerTurn = false;
+        gameOver = false;
+        side = "right";
+        swayRecord = new Stack<>();
     }
 
     /**
