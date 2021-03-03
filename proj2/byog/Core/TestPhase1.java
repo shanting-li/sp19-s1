@@ -273,9 +273,9 @@ public class TestPhase1 {
         System.out.println(Arrays.deepEquals(world, world2));*/
 
         //2.test load 接替
-        /*TETile[][] world = test.playWithInputString("n3415218040718096461ssdsddaddaad");
+        TETile[][] world = test.playWithInputString("n3415218040718096461ssdsddaddaad");
         TETile[][] world2 = test.playWithInputString("n3415218040718096461ssdsddaddaa:q");
-        world2 = test.playWithInputString("ld");*/
+        world2 = test.playWithInputString("ld");
         //s1, pass
         /*TETile[][] world = test.playWithInputString("N19900111111111111SDDDWWWDDD");
         //test.playWithInputString("N5001SDDD");
@@ -290,11 +290,11 @@ public class TestPhase1 {
         world2 = test.playWithInputString("LDDD:Q");*/
 
         //s3, pass
-        TETile[][] world = test.playWithInputString("N999SDDDWWWDDD");
+        /*TETile[][] world = test.playWithInputString("N999SDDDWWWDDD");
         TETile[][] world2 = test.playWithInputString("N999SDDD:Q");
         world2 = test.playWithInputString("L:Q");
         world2 = test.playWithInputString("L:Q");
-        world2 = test.playWithInputString("LWWWDDD");
+        world2 = test.playWithInputString("LWWWDDD");*/
 
         /*for(int x = 0; x < test.WIDTH; x++) {
             for(int y = 0; y < test.HEIGHT; y++) {
