@@ -9,8 +9,15 @@ import java.util.HashSet;
 public class MyBSTest {
     public static void main(String[] args) {
         BSTMap<Integer, String> x = new BSTMap<>();
+        x.put(4, "Hange");
         x.put(3, "Levi");
-        x.put(1, "Erwin");
+        x.put(0, "Ymir");
+        x.remove(0);
+        x.put(7, "Mikasa");
+        x.put(8, "Armin");
+        x.remove(4);
+        System.out.println(x.get(3));
+        /*x.put(1, "Erwin");
         x.put(0, "Ymir");
         x.put(2, "Jean");
         x.put(5, "Sasha");
@@ -21,12 +28,12 @@ public class MyBSTest {
         x.put(11, "Pixis");
         x.put(6, "Ani");
         x.put(9, "Bertholdt");
-        x.put(8, "Armin");
+        x.put(8, "Armin");*/
 
-        System.out.println(x.get(3));//Levi
+        /*System.out.println(x.get(3));//Levi
         System.out.println(x.get(5));//Sasha
         System.out.println(x.get(2));//Jean
-        System.out.println(x.get(7));//Mikasa
+        System.out.println(x.get(7));//Mikasa*/
 
         //test set
         /*Set<Integer> keys =  x.keySet();
@@ -34,11 +41,11 @@ public class MyBSTest {
             System.out.println(i);//0-11
         }*/
 
-        System.out.println("size = " + x.size());//12
+        /*System.out.println("size = " + x.size());//12
         Iterator<Integer> i = x.iterator();
         while(i.hasNext()) {
             System.out.println(i.next());
-        }
+        }*/
 
 
         /*test remove*/
