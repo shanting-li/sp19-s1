@@ -143,7 +143,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      * 找到并返回指定非空节点为root的树中最右边的节点的父节点
      */
     private Node findMaxChildNodesFather(Node p) {
-        if(p.right.right == null) {
+        if(p == null || p.right.right == null) {
             return p;
         } else {
             return findMaxChildNodesFather(p.right);
