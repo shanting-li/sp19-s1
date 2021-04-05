@@ -276,6 +276,7 @@ public class TestPhase1 {
         TETile[][] world = test.playWithInputString("n3415218040718096461ssdsddaddaad");
         TETile[][] world2 = test.playWithInputString("n3415218040718096461ssdsddaddaa:q");
         world2 = test.playWithInputString("ld");
+
         //s1, pass
         /*TETile[][] world = test.playWithInputString("N19900111111111111SDDDWWWDDD");
         //test.playWithInputString("N5001SDDD");
@@ -305,8 +306,10 @@ public class TestPhase1 {
         }*/
         boolean a = Arrays.deepEquals(world, world2);
         System.out.println(a);
+        boolean b = Arrays.equals(world, world2);
+        System.out.println(b);
         //ter.renderFrame(world);
-        ter.renderFrame(world2);
+
 
 
 

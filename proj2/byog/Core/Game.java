@@ -1093,11 +1093,11 @@ public class Game implements Serializable{
             // the point the player get to,
             // the start point and win point of the maze,
             // and whether the player has already won.
-            try {
+            /*try {
                 DeServializePerson();
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
             moveStart = savedEnd.peek();
             world = savedFiles.peek();
             newStart = savedNewStart.peek();
@@ -1271,7 +1271,12 @@ public class Game implements Serializable{
     }
 
     private void saveMaze(Position moved) {
-        Position savedMoved = new Position(moved.x, moved.y);
+        savedEnd.push(moved);
+        savedFiles.push(world);
+        savedLockedDoor.push(lockedDoor);
+        savedNewStart.push(newStart);
+        savedWin.push(IsWin);
+        /*Position savedMoved = new Position(moved.x, moved.y);
         Position savedNewS = new Position(newStart.x, newStart.y);
         Position savedDoor = new Position(lockedDoor.x, lockedDoor.y);
 
@@ -1279,13 +1284,13 @@ public class Game implements Serializable{
         savedFiles.push(world);
         savedLockedDoor.push(savedDoor);
         savedNewStart.push(savedNewS);
-        savedWin.push(IsWin);
+        savedWin.push(IsWin);*/
 
-        try {
+        /*try {
             ServializeGame();
         } catch(IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
     private void clearStringGame() {
         world = null;
@@ -1353,11 +1358,11 @@ public class Game implements Serializable{
                         item = StdDraw.nextKeyTyped();
                         if (item == 'q') {
                             saveMaze(moved);
-                            /*try {
+                            try {
                                 ServializeGame();
                             } catch(IOException e) {
                                 e.printStackTrace();
-                            }*/
+                            }
                             gameOver = true;
                             break;
                         } else {

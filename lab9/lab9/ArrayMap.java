@@ -19,6 +19,7 @@ public class ArrayMap<K, V> implements Map61B<K, V> {
         size = 0;
     }
 
+
     /** Returns the index of the given key if it exists,
      *  -1 otherwise. */
     private int keyIndex(K key) {
@@ -53,6 +54,8 @@ public class ArrayMap<K, V> implements Map61B<K, V> {
             values[size] = value;
             size += 1;
             return;
+        } else {
+            values[index] = value;
         }
         values[index] = value;
     }

@@ -29,6 +29,7 @@ public class ts {
 
         System.out.println(b.x + " " + b.y);
         System.out.println(ina.peek().x + " " + ina.peek().y);
+        System.out.println(b.equals(ina.peek()));
 
     }
 }
