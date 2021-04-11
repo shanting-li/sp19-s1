@@ -61,11 +61,11 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     private V getHelper(K key, Node p) {
 
         //throw new UnsupportedOperationException();
-        if(p == null) {
+        if (p == null) {
             return null;
-        } else if(p.key.equals(key)) {
+        } else if (p.key.equals(key)) {
             return p.value;
-        } else if(p.key.compareTo(key) < 0){
+        } else if (p.key.compareTo(key) < 0) {
             return getHelper(key, p.right);
         } else {
             return getHelper(key, p.left);
@@ -87,12 +87,12 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     private Node putHelper(K key, V value, Node p) {
         //throw new UnsupportedOperationException();
-        if( p == null) {
+        if (p == null) {
             p = new Node(key, value);
             size += 1;
-        } else if(p.key.equals(key)) {
+        } else if (p.key.equals(key)) {
             p.value = value;
-        } else if(p.key.compareTo(key) < 0){
+        } else if (p.key.compareTo(key) < 0){
             p.right = putHelper(key, value, p.right);
         } else {
             p.left = putHelper(key, value, p.left);
@@ -121,7 +121,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
     /* Returns a Set view of the keys contained in this map. */
     private void helpKeySet(Set<K> x, Node p) {
-        if(p == null) {
+        if (p == null) {
             return;
         } else {
             x.add(p.key);
@@ -143,9 +143,9 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      * 找到并返回指定非空节点为root的树中最右边的节点的父节点
      */
     private Node findMaxChildNodesFather(Node p) {
-        if(p.right == null) {
+        if (p.right == null) {
             return p;
-        } else if(p.right.right == null) {
+        } else if (p.right.right == null) {
             return p;
         } else {
             return findMaxChildNodesFather(p.right);
@@ -155,20 +155,20 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     /**
      * 删除节点p（p就是这棵树的根节点）并返回删除后的树的根节点
      */
-    private Node helpRemoveRoot(Node p, K key) {
-        if(p == null) {
+    private Node helpRemoveRoot(Node p) {
+        if (p == null) {
             return null;
-        } else if(p.left == null && p.right == null) {
+        } else if (p.left == null && p.right == null) {
             return null;
-        } else if(p.left != null && p.right == null) {
+        } else if (p.left != null && p.right == null) {
             p = p.left;
-        } else if(p.left == null && p.right != null) {
+        } else if (p.left == null && p.right != null) {
             p = p.right;
         } else {
             Node tempFather = findMaxChildNodesFather(p.left);
             Node temp = findMaxChildNodesFather(p.left).right;
 
-            if(temp == null) {
+            if (temp == null) {
                 Node t = p.right;
                 p = p.left;
                 p.right = t;
@@ -190,13 +190,13 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      * @return
      */
     private Node helpRemove(Node r, K key) {
-        if(r == null) {
+        if (r == null) {
             return null;
-        } else if(r.key.equals(key)) {
-            return helpRemoveRoot(r, key);
-        } else if(r.key.compareTo(key) < 0){
+        } else if (r.key.equals(key)) {
+            return helpRemoveRoot(r);
+        } else if (r.key.compareTo(key) < 0){
             r.right = helpRemove(r.right, key);
-        } else if(r.key.compareTo(key) > 0) {
+        } else if (r.key.compareTo(key) > 0) {
             r.left = helpRemove(r.left, key);
         }
         return r;
@@ -228,7 +228,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     public V remove(K key, V value) {
         //throw new UnsupportedOperationException();
         V ans = get(key);
-        if(ans.equals(value)) {
+        if (ans.equals(value)) {
             root = helpRemove(root, key);
             size -= 1;
             return ans;
@@ -249,14 +249,14 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         }
         @Override
         public K next() {
-            if(store == null || root == null) {
+            if (store == null || root == null) {
                 return null;
             } else {
                 Node temp = store.pop();
-                if(temp.right != null) {
+                if (temp.right != null) {
                     store.push(temp.right);
                 }
-                if(temp.left != null) {
+                if (temp.left != null) {
                     store.push(temp.left);
                 }
                 return (K)temp.key;
@@ -266,8 +266,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     @Override
     public Iterator<K> iterator() {
         //throw new UnsupportedOperationException();
-        Iterator<K> ans = new BSTIterator<K>();
-        return ans;
+        return new BSTIterator<K>();
 
     }
 }

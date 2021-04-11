@@ -17,6 +17,8 @@ public class MyBSTest {
         x.put(8, "Armin");
         x.remove(4);
         System.out.println(x.get(3));
+        System.out.println(x.get(0));
+        System.out.println(x.get(4));
         /*x.put(1, "Erwin");
         x.put(0, "Ymir");
         x.put(2, "Jean");
@@ -41,11 +43,11 @@ public class MyBSTest {
             System.out.println(i);//0-11
         }*/
 
-        /*System.out.println("size = " + x.size());//12
+        System.out.println("size = " + x.size());//12
         Iterator<Integer> i = x.iterator();
         while(i.hasNext()) {
             System.out.println(i.next());
-        }*/
+        }
 
 
         /*test remove*/
