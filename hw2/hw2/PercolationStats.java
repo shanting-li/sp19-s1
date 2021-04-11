@@ -35,18 +35,16 @@ public class PercolationStats {
     private double oneTimeExperiment(int N, PercolationFactory pf) {
         Percolation grid = pf.make(N);
         double totalGrid = N * N;
+        int totalOpen = 0;
 
         while (true) {
-            int totalToOpen = StdRandom.uniform(N * N);
-            int[] indexToOpen = StdRandom.permutation(N * N, totalToOpen);
-            Stack<Position> p = numTo2D(indexToOpen);
-            while(!(p.isEmpty())) {
-                Position temp = p.pop();
-                grid.open(temp.x, temp.y);
-            }
+            int indexToOpen = StdRandom.uniform(N * N);
+            Position p = numTo2D(indexToOpen);
+            grid.open(p.x, p.y);
+            totalOpen += 1;
 
             if (grid.percolates()) {
-                double ans = totalToOpen / totalGrid;
+                double ans = totalOpen / totalGrid;
                 return ans;
             }
         }
@@ -60,14 +58,6 @@ public class PercolationStats {
         Position ans = new Position(row, col);
         return ans;
     }
-    private Stack<Position> numTo2D(int[] numList) {
-        Stack<Position> ans = new Stack<>();
-        for(int i : numList) {
-            ans.push(numTo2D(i));
-        }
-        return ans;
-    }
-
 
     /**
      * sample mean of percolation threshold
@@ -103,25 +93,26 @@ public class PercolationStats {
         return ans;
     }
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         //permutation, 输入n，返回0-n-1的随机排列
-        int[] num = StdRandom.permutation(4 * 4);
+        /*int[] num = StdRandom.permutation(4 * 4);
         for(int n : num) {
             System.out.println(n);
-        }
+        }*/
 
         //test uniform
         /*int totalToOpen = StdRandom.uniform(4 * 4);
         System.out.println(totalToOpen);
         int[] indexToOpen = StdRandom.permutation(4*4, totalToOpen);
         for(int n : indexToOpen) {
-            System.out
+            System.out*/
         PercolationFactory a = new PercolationFactory();
         PercolationStats x = new PercolationStats(20, 10, a);
+        System.out.println(x.mean());
         System.out.println(x.confidenceLow());
         System.out.println(x.confidenceHigh());
 
-    }*/
+    }
 
 
 
