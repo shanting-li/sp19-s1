@@ -5,24 +5,30 @@ import edu.princeton.cs.introcs.StdStats;
 import java.util.Stack;
 
 public class PercolationStats {
-    double[] thresholds;
-    int gridSize;
-    int times;
+    private double[] thresholds;
+    private int gridSize;
+    private int times;
 
-    private Position numTo2D(int num) {
-        //num = row * gridSize + col;
-        int col = num % gridSize;
-        int row = (num - col) / gridSize;
-        Position ans = new Position(row, col);
-        return ans;
-    }
-    private Stack<Position> numTo2D(int[] numList) {
-        Stack<Position> ans = new Stack<>();
-        for(int i : numList) {
-            ans.push(numTo2D(i));
+    /**
+     * perform T independent experiments on an N-by-N grid
+     * throw java.lang.IllegalArgumentException if N<=0 or T<=0
+     * @param N
+     * @param T
+     * @param pf
+     */
+    public PercolationStats(int N, int T, PercolationFactory pf) {
+        if (N <= 0 || T <= 0) {
+            throw new java.lang.IllegalArgumentException ("T and N should be positive.");
+        } else {
+            gridSize = N;
+            times = T;
+            thresholds = new double[T];
+            for(int i = 0; i < T; i++) {
+                thresholds[i] = oneTimeExperiment(N, pf);
+            }
         }
-        return ans;
     }
+
     /**
      * one experiment, return the threshold of a successfully percolating experiment
      */
@@ -47,25 +53,21 @@ public class PercolationStats {
 
     }
 
-    /**
-     * perform T independent experiments on an N-by-N grid
-     * throw java.lang.IllegalArgumentException if N<=0 or T<=0
-     * @param N
-     * @param T
-     * @param pf
-     */
-    public PercolationStats(int N, int T, PercolationFactory pf) {
-        if (N <= 0 || T <= 0) {
-            throw new java.lang.IllegalArgumentException ("T and N should be positive.");
-        } else {
-            gridSize = N;
-            times = T;
-            thresholds = new double[T];
-            for(int i = 0; i < T; i++) {
-                thresholds[i] = oneTimeExperiment(N, pf);
-            }
-        }
+    private Position numTo2D(int num) {
+        //num = row * gridSize + col;
+        int col = num % gridSize;
+        int row = (num - col) / gridSize;
+        Position ans = new Position(row, col);
+        return ans;
     }
+    private Stack<Position> numTo2D(int[] numList) {
+        Stack<Position> ans = new Stack<>();
+        for(int i : numList) {
+            ans.push(numTo2D(i));
+        }
+        return ans;
+    }
+
 
     /**
      * sample mean of percolation threshold
@@ -101,25 +103,25 @@ public class PercolationStats {
         return ans;
     }
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         //permutation, 输入n，返回0-n-1的随机排列
-        int[] num = StdRandom.permutation(4 * 4);
+        /*int[] num = StdRandom.permutation(4 * 4);
         for(int n : num) {
             System.out.println(n);
-        }
+        }*/
 
         //test uniform
-         totalToOpen = StdRandom.uniform(4 * 4);
+        int totalToOpen = StdRandom.uniform(4 * 4);
         System.out.println(totalToOpen);
-        int[] indexToOpen = StdRandom.permutation(4*4, totalToOpen);
+        /*int[] indexToOpen = StdRandom.permutation(4*4, totalToOpen);
         for(int n : indexToOpen) {
-            System.ou
+            System.out
         PercolationFactory a = new PercolationFactory();
         PercolationStats x = new PercolationStats(200, 100, a);
         System.out.println(x.confidenceLow());
-        System.out.println(x.confidenceHigh());
+        System.out.println(x.confidenceHigh());*/
 
-    }*/
+    }
 
 
 

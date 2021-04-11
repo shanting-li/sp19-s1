@@ -36,7 +36,7 @@ public class Percolation {
             }
 
             // set the totalSet
-            int setSize = N * N + 1;
+            int setSize = N * N;
             FullSet = new WeightedQuickUnionUF(setSize);
             for (int i = 0; i < N - 1; i++) {
                 int top = XYto1D(0, i);
@@ -161,12 +161,9 @@ public class Percolation {
      * use for unit testing (not required)
      */
     public static void main(String[] args) {
-        Percolation y = new Percolation(4);
-        y.open(3,1);
-        y.open(0,1);
-        y.open(2,2);
-        y.open(2,1);
-        y.open(1,1);
+        Percolation y = new Percolation(1);
+        y.open(0,0);
+        System.out.println(y.percolates());
 
         //测试初始化
         /*Percolation x = new Percolation(4);
