@@ -33,12 +33,11 @@ public class PercolationStats {
      * one experiment, return the threshold of a successfully percolating experiment
      */
     private double oneTimeExperiment(int N, PercolationFactory pf) {
-        while (true) {
-            double totalGrid = N * N;
-            int totalToOpen = StdRandom.uniform(N * N);
-            double ans = totalToOpen / totalGrid;
+        Percolation grid = pf.make(N);
+        double totalGrid = N * N;
 
-            Percolation grid = pf.make(N);
+        while (true) {
+            int totalToOpen = StdRandom.uniform(N * N);
             int[] indexToOpen = StdRandom.permutation(N * N, totalToOpen);
             Stack<Position> p = numTo2D(indexToOpen);
             while(!(p.isEmpty())) {
@@ -47,6 +46,7 @@ public class PercolationStats {
             }
 
             if (grid.percolates()) {
+                double ans = totalToOpen / totalGrid;
                 return ans;
             }
         }
@@ -103,25 +103,25 @@ public class PercolationStats {
         return ans;
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         //permutation, 输入n，返回0-n-1的随机排列
-        /*int[] num = StdRandom.permutation(4 * 4);
+        int[] num = StdRandom.permutation(4 * 4);
         for(int n : num) {
             System.out.println(n);
-        }*/
+        }
 
         //test uniform
-        int totalToOpen = StdRandom.uniform(4 * 4);
+        /*int totalToOpen = StdRandom.uniform(4 * 4);
         System.out.println(totalToOpen);
-        /*int[] indexToOpen = StdRandom.permutation(4*4, totalToOpen);
+        int[] indexToOpen = StdRandom.permutation(4*4, totalToOpen);
         for(int n : indexToOpen) {
             System.out
         PercolationFactory a = new PercolationFactory();
-        PercolationStats x = new PercolationStats(200, 100, a);
+        PercolationStats x = new PercolationStats(20, 10, a);
         System.out.println(x.confidenceLow());
-        System.out.println(x.confidenceHigh());*/
+        System.out.println(x.confidenceHigh());
 
-    }
+    }*/
 
 
 
