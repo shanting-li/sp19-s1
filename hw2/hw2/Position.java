@@ -1,8 +1,8 @@
 package hw2;
 
 public class Position {
-    public int x;
-    public int y;
+    protected int x;
+    protected int y;
 
     public Position(int row, int col) {
         x = row;

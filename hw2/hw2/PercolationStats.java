@@ -2,7 +2,6 @@ package hw2;
 import  edu.princeton.cs.introcs.StdRandom;
 import edu.princeton.cs.introcs.StdStats;
 
-import java.util.Stack;
 
 public class PercolationStats {
     private double[] thresholds;
@@ -18,12 +17,12 @@ public class PercolationStats {
      */
     public PercolationStats(int N, int T, PercolationFactory pf) {
         if (N <= 0 || T <= 0) {
-            throw new java.lang.IllegalArgumentException ("T and N should be positive.");
+            throw new java.lang.IllegalArgumentException("T and N should be positive.");
         } else {
             gridSize = N;
             times = T;
             thresholds = new double[T];
-            for(int i = 0; i < T; i++) {
+            for (int i = 0; i < T; i++) {
                 thresholds[i] = oneTimeExperiment(N, pf);
             }
         }
@@ -93,13 +92,13 @@ public class PercolationStats {
 
     /*public static void main(String[] args) {
         //permutation, 输入n，返回0-n-1的随机排列
-        /*int[] num = StdRandom.permutation(4 * 4);
+        int[] num = StdRandom.permutation(4 * 4);
         for(int n : num) {
             System.out.println(n);
         }
 
         //test uniform
-        /*int totalToOpen = StdRandom.uniform(4 * 4);
+        int totalToOpen = StdRandom.uniform(4 * 4);
         System.out.println(totalToOpen);
         int[] indexToOpen = StdRandom.permutation(4*4, totalToOpen);
         for(int n : indexToOpen) {
@@ -109,7 +108,6 @@ public class PercolationStats {
         System.out.println(x.mean());
         System.out.println(x.confidenceLow());
         System.out.println(x.confidenceHigh());
-
     }*/
 
 

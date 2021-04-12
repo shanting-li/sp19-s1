@@ -3,17 +3,17 @@ package hw2;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 import java.util.Stack;
-//union(), find(), connected(), count() 集合的size
+
 
 public class Percolation {
     private int[][] grid;
     private int gridSize;
-    private WeightedQuickUnionUF FullSet;
-    private WeightedQuickUnionUF PerSet;
+    private WeightedQuickUnionUF fullSet;
+    private WeightedQuickUnionUF perSet;
     private int openNum;
 
 
-    private int XYto1D(int row, int col) {
+    private int xYto1D(int row, int col) {
         return row * gridSize + col;
     }
 
@@ -37,23 +37,22 @@ public class Percolation {
 
             // set the totalSet
             int setSize = N * N;
-            FullSet = new WeightedQuickUnionUF(setSize);
+            fullSet = new WeightedQuickUnionUF(setSize);
             for (int i = 0; i < N - 1; i++) {
-                int top = XYto1D(0, i);
-                FullSet.union(top, top + 1);
+                int top = xYto1D(0, i);
+                fullSet.union(top, top + 1);
             }
-            PerSet = new WeightedQuickUnionUF(setSize);
+            perSet = new WeightedQuickUnionUF(setSize);
             for (int i = 0; i < N - 1; i++) {
-                int top = XYto1D(0, i);
-                PerSet.union(top, top + 1);
-                int bt = XYto1D(gridSize - 1, i);
-                PerSet.union(bt, bt + 1);
+                int top = xYto1D(0, i);
+                perSet.union(top, top + 1);
+                int bt = xYto1D(gridSize - 1, i);
+                perSet.union(bt, bt + 1);
             }
 
 
         } else {
-            throw new java.lang.IllegalArgumentException
-                    ("N should be positive");
+            throw new java.lang.IllegalArgumentException("N should be positive");
         }
     }
 
@@ -103,10 +102,10 @@ public class Percolation {
             while (!(neighbor.isEmpty())) {
                 Position n = neighbor.pop();
                 if (isOpen(n.x, n.y)) {
-                    int thisSetNum = XYto1D(row, col);
-                    int neighborSetNum = XYto1D(n.x, n.y);
-                    FullSet.union(thisSetNum, neighborSetNum);
-                    PerSet.union(thisSetNum, neighborSetNum);
+                    int thisSetNum = xYto1D(row, col);
+                    int neighborSetNum = xYto1D(n.x, n.y);
+                    fullSet.union(thisSetNum, neighborSetNum);
+                    perSet.union(thisSetNum, neighborSetNum);
                 }
             }
         }
@@ -135,8 +134,8 @@ public class Percolation {
         if (cornerCase(row, col)) {
             throw new java.lang.IndexOutOfBoundsException("corner cases");
         } else {
-            int temp = XYto1D(row, col);
-            return isOpen(row, col) && FullSet.connected(0, temp);
+            int temp = xYto1D(row, col);
+            return isOpen(row, col) && fullSet.connected(0, temp);
         }
     }
 
@@ -153,7 +152,10 @@ public class Percolation {
      * @return does the system percolate?
      */
     public boolean percolates() {
-        return PerSet.connected(0, gridSize * (gridSize - 1));
+        if (gridSize == 1) {
+            return isOpen(0, 0);
+        }
+        return perSet.connected(0, gridSize * (gridSize - 1));
     }
 
 
@@ -162,7 +164,8 @@ public class Percolation {
      */
     public static void main(String[] args) {
         Percolation y = new Percolation(1);
-        y.open(0,0);
+        System.out.println(y.percolates());
+        y.open(0, 0);
         System.out.println(y.percolates());
 
         //测试初始化
