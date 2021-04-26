@@ -175,7 +175,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     @Override
     public T removeMin() {
-        if (size < 1) {
+        if (size == 0) {
             return null;
         } else {
             // 1 交换root和最后一个
@@ -187,11 +187,11 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
             size -= 1;
 
             // 3 sink root
-            sink(1);
-
+            if (size > 0) {
+                sink(1);
+            }
             return ans;
         }
-
     }
 
     /**
