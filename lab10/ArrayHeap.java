@@ -28,7 +28,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     private static int leftIndex(int i) {
         /* TODO: Your code here! */
-        return 0;
+        return 2 * i;
     }
 
     /**
@@ -36,7 +36,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     private static int rightIndex(int i) {
         /* TODO: Your code here! */
-        return 0;
+        return 2 * i + 1;
     }
 
     /**
@@ -44,7 +44,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     private static int parentIndex(int i) {
         /* TODO: Your code here! */
-        return 0;
+        return i / 2;
     }
 
     /**
@@ -107,8 +107,15 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
 
-        /** TODO: Your code here. */
-        return;
+        //如果当前的index对应的node的priority比父亲的小，就跟父亲对调
+        int pIndex = parentIndex(index);
+        if (inBounds(pIndex)) {
+            if (index == min(index, pIndex)) {
+                swap(index, pIndex);
+            }
+            swim(pIndex);
+        }
+
     }
 
     /**
@@ -118,8 +125,16 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
 
-        /** TODO: Your code here. */
-        return;
+        //如果当前的index对应的node的priority比更小的孩子大，就跟更小的孩子对调
+        if (getNode(leftIndex(index)) == null && getNode(rightIndex(index)) == null) {
+            return;
+        }
+        int smallerChildIndex = min(leftIndex(index), rightIndex(index));
+        if (smallerChildIndex == min(index, smallerChildIndex)) {
+            swap(index, smallerChildIndex);
+        }
+        sink(smallerChildIndex);
+
     }
 
     /**
@@ -133,7 +148,11 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
             resize(contents.length * 2);
         }
 
-        /* TODO: Your code here! */
+        Node temp = new Node(item, priority);
+        size += 1;
+        contents[size] = temp;
+        swim(size);
+
     }
 
     /**
@@ -142,8 +161,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     @Override
     public T peek() {
-        /* TODO: Your code here! */
-        return null;
+        return contents[1].item();
     }
 
     /**
@@ -157,8 +175,18 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     @Override
     public T removeMin() {
-        /* TODO: Your code here! */
-        return null;
+        // 1 交换root和最后一个
+        swap(1,  size);
+
+        // 2 删除最后一个，并记录它的item值
+        T ans = contents[size].item();
+        contents[size] = null;
+        size -= 1;
+
+        // 3 sink root
+        sink(1);
+
+        return ans;
     }
 
     /**
@@ -171,6 +199,16 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         return size;
     }
 
+    private int getIndex(T item) {
+        for (int i = 1; i <= size; i++) {
+            if (contents[i].myItem.equals(item)) {
+                return i;
+            }
+        }
+       return -1;
+    }
+
+
     /**
      * Change the node in this heap with the given item to have the given
      * priority. You can assume the heap will not have two nodes with the same
@@ -180,9 +218,42 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     @Override
     public void changePriority(T item, double priority) {
-        /* TODO: Your code here! */
-        return;
+        int targetIndex = getIndex(item);
+
+        if (targetIndex == -1) {
+            insert(item, priority);
+        } else {
+            double currentP = contents[targetIndex].priority();
+            contents[targetIndex].myPriority = priority;
+            if (currentP < priority) {
+                sink(targetIndex);
+            } else {
+                swim(targetIndex);
+            }
+        }
     }
+
+    /*@Test
+    public void testChangePriority() {
+        ArrayHeap<String> pq = new ArrayHeap<>();
+        pq.insert("c", 3);
+        pq.insert("i", 9);
+        pq.insert("g", 7);
+        pq.insert("d", 4);
+        pq.insert("a", 1);
+        pq.insert("h", 8);
+        pq.insert("e", 5);
+        pq.insert("b", 2);
+        pq.insert("m", 10);
+        pq.insert("k", 0);
+
+        pq.changePriority("a", 11);
+
+        assertEquals(2, pq.contents[2].priority(), 0.001);
+        assertEquals(4, pq.contents[5].priority(), 0.001);
+        assertEquals(11, pq.contents[10].priority(), 0.001);
+    }*/
+
 
     /**
      * Prints out the heap sideways. Provided for you.
