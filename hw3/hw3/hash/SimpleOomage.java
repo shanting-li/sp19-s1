@@ -10,26 +10,49 @@ public class SimpleOomage implements Oomage {
     protected int blue;
 
     private static final double WIDTH = 0.01;
-    private static final boolean USE_PERFECT_HASH = false;
+    private static final boolean USE_PERFECT_HASH = true;
 
     @Override
     public boolean equals(Object o) {
-        // TODO: Write this method.
-        return false;
+        //1 如果地址相同返回true
+        if (this == o) {
+            return true;
+        }
+
+        //2 如果o为null返回false
+        if (o == null) {
+            return false;
+        }
+
+        //3 如果类型不同getClass，返回false
+        if (this.getClass() != o.getClass()) {
+            return false;
+        }
+
+        //4 cast o 的类型为SimpleOomage，比较指定影响因素，若相同则返回true
+        SimpleOomage com = (SimpleOomage) o;
+        return this.red == com.red && this.green == com.green && this.blue == com.blue;
     }
 
     /* Uncomment this method after you've written
        equals and failed the testHashCodeAndEqualsConsistency
-       test.
+       test.*/
     @Override
     public int hashCode() {
         if (!USE_PERFECT_HASH) {
             return red + green + blue;
         } else {
-            // TODO: Write a perfect hash function for Simple Oomages.
-            return 0;
+            int  ans = 0;
+            int[] color = new int[]{this.red, this.green, this.blue};
+            for (int i = 0; i < color.length; i ++) {
+                ans *= 31;
+                //ans += color[i] - 1;
+                ans += color[i] / 5;
         }
-    }*/
+            return ans;
+        }
+
+    }
 
     public SimpleOomage(int r, int g, int b) {
         if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {

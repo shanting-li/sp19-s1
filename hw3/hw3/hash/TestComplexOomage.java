@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TestComplexOomage {
@@ -36,15 +37,54 @@ public class TestComplexOomage {
     /* TODO: Create a list of Complex Oomages called deadlyList
      * that shows the flaw in the hashCode function.
      */
-    /*
+
     @Test
     public void testWithDeadlyParams() {
         List<Oomage> deadlyList = new ArrayList<>();
 
+        List<Integer> namesList = Arrays.asList( 64,12,19,0,125,255,254,51,6,253);
+        List<Integer> p1 = new ArrayList<>(namesList);
+
+        namesList = Arrays.asList( 128,12,19,0,125,255,254,51,6,253);
+        List<Integer> p2 = new ArrayList<>(namesList);
+
+        namesList = Arrays.asList( 120,12,19,0,125,255,254,51,6,253);
+        List<Integer> p3 = new ArrayList<>(namesList);
+
+        namesList = Arrays.asList( 121,12,19,0,125,255,254,51,6,253);
+        List<Integer> p4 = new ArrayList<>(namesList);
+
+        namesList = Arrays.asList( 123,12,19,0,125,255,254,51,6,253);
+        List<Integer> p5 = new ArrayList<>(namesList);
+
+        namesList = Arrays.asList( 124,12,19,0,125,255,254,51,6,253);
+        List<Integer> p6 = new ArrayList<>(namesList);
+
+        namesList = Arrays.asList( 225,12,19,0,125,255,254,51,6,253);
+        List<Integer> p7 = new ArrayList<>(namesList);
+
+        ComplexOomage t1 = new ComplexOomage(p1);
+        ComplexOomage t2 = new ComplexOomage(p2);
+        ComplexOomage t3 = new ComplexOomage(p3);
+        ComplexOomage t4 = new ComplexOomage(p4);
+        ComplexOomage t5 = new ComplexOomage(p5);
+        ComplexOomage t6 = new ComplexOomage(p6);
+        ComplexOomage t7 = new ComplexOomage(p7);
+
+        deadlyList.add(t1);
+        deadlyList.add(t2);
+        deadlyList.add(t3);
+        deadlyList.add(t4);
+        deadlyList.add(t5);
+        deadlyList.add(t6);
+        deadlyList.add(t7);
+
         // Your code here.
 
+
+        //HashTableVisualizer.visualize(deadlyList,100, 0.5);
         assertTrue(OomageTestUtility.haveNiceHashCodeSpread(deadlyList, 10));
-    } */
+    }
 
     /** Calls tests for SimpleOomage. */
     public static void main(String[] args) {
