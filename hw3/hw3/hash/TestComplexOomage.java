@@ -42,25 +42,25 @@ public class TestComplexOomage {
     public void testWithDeadlyParams() {
         List<Oomage> deadlyList = new ArrayList<>();
 
-        List<Integer> namesList = Arrays.asList( 64,12,19,0,125,255,254,51,6,253);
+        List<Integer> namesList = Arrays.asList( 8, 12, 1, 0, 8);
         List<Integer> p1 = new ArrayList<>(namesList);
 
-        namesList = Arrays.asList( 128,12,19,0,125,255,254,51,6,253);
+        namesList = Arrays.asList( 129, 12, 1, 0, 8);
         List<Integer> p2 = new ArrayList<>(namesList);
 
-        namesList = Arrays.asList( 120,12,19,0,125,255,254,51,6,253);
+        namesList = Arrays.asList( 130, 12, 1, 0, 8);
         List<Integer> p3 = new ArrayList<>(namesList);
 
-        namesList = Arrays.asList( 121,12,19,0,125,255,254,51,6,253);
+        namesList = Arrays.asList( 131, 12, 1, 0, 8);
         List<Integer> p4 = new ArrayList<>(namesList);
 
-        namesList = Arrays.asList( 123,12,19,0,125,255,254,51,6,253);
+        namesList = Arrays.asList( 134, 12, 1, 0, 8);
         List<Integer> p5 = new ArrayList<>(namesList);
 
-        namesList = Arrays.asList( 124,12,19,0,125,255,254,51,6,253);
+        namesList = Arrays.asList( 135, 12, 1, 0, 8);
         List<Integer> p6 = new ArrayList<>(namesList);
 
-        namesList = Arrays.asList( 225,12,19,0,125,255,254,51,6,253);
+        namesList = Arrays.asList( 136, 12, 1, 0, 8);
         List<Integer> p7 = new ArrayList<>(namesList);
 
         ComplexOomage t1 = new ComplexOomage(p1);
@@ -82,7 +82,7 @@ public class TestComplexOomage {
         // Your code here.
 
 
-        //HashTableVisualizer.visualize(deadlyList,100, 0.5);
+        HashTableVisualizer.visualize(deadlyList,100, 0.5);
         assertTrue(OomageTestUtility.haveNiceHashCodeSpread(deadlyList, 10));
     }
 

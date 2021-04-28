@@ -45,7 +45,7 @@ public class SimpleOomage implements Oomage {
             int  ans = 0;
             int[] color = new int[]{this.red, this.green, this.blue};
             for (int i = 0; i < color.length; i ++) {
-                ans *= 31;
+                ans *= 53;
                 //ans += color[i] - 1;
                 ans += color[i] / 5;
         }
@@ -85,6 +85,11 @@ public class SimpleOomage implements Oomage {
         randomSimpleOomage().draw(0.75, 0.75, 1);
         randomSimpleOomage().draw(0.25, 0.75, 1);
         randomSimpleOomage().draw(0.75, 0.25, 1);
+
+        /*SimpleOomage s1 = new SimpleOomage(0, 0, 155);
+        SimpleOomage s2 = new SimpleOomage(0, 5, 0);
+        System.out.println(s1.hashCode());
+        System.out.println(s2.hashCode());*/
     }
 
     public String toString() {

@@ -9,13 +9,11 @@ public class ComplexOomage implements Oomage {
     protected List<Integer> params;
     private static final double WIDTH = 0.05;
 
-    @Override
+   @Override
     public int hashCode() {
         int total = 0;
         for (int x : params) {
-            //256=2的8次方，如果r/g/b的值>=15位对后面的数就没有影响了
-            //param一共10个数，其中p[0] * 2^9,所以p[0] >64 就会出问题
-            //p[1] * 2^8，所以p[1] >128 也会出问题
+            //256=2的8次方，所以只要往左平移4次（32/8=4），这个数就会对后面32位数完全没影响
             total = total * 256;
             total = total + x;
         }
