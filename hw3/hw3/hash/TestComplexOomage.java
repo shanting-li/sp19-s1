@@ -82,7 +82,7 @@ public class TestComplexOomage {
         // Your code here.
 
 
-        HashTableVisualizer.visualize(deadlyList,100, 0.5);
+        //HashTableVisualizer.visualize(deadlyList,100, 0.5);
         assertTrue(OomageTestUtility.haveNiceHashCodeSpread(deadlyList, 10));
     }
 
