@@ -12,7 +12,9 @@ public class AlphabetEasyPuzzleSolver {
         AlphabetEasyPuzzle startState = new AlphabetEasyPuzzle(start);
         Solver solver = new Solver(startState);
 
-        StdOut.println("Minimum number of moves = " + solver.moves());
+        int n = solver.moves();
+        StdOut.println("Minimum number of moves = " + n);
+        //StdOut.println("Minimum number of moves = " + solver.moves());
         for (WorldState ws : solver.solution()) {
             StdOut.println(ws);
         }

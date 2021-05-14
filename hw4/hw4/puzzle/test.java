@@ -54,10 +54,12 @@ public class test {
         y.push(null);
         System.out.println(y.size());
 
-        String ss = "work";
+        String ss = "a";
         String sx = "4pop";
+        char c ='v';
         System.out.println(ss.matches("[a-zA-Z]+"));
         System.out.println(sx.matches("[a-zA-Z]+"));
+        System.out.println(Character.toString(c).matches("[a-zA-Z]+"));
     }
 
 }

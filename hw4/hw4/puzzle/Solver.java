@@ -9,6 +9,7 @@ public class Solver {
     private WorldState start;
     private Node end;
     private MinPQ<Node> pq;
+    private HashMap<WorldState, Node> wInPQ;
     private HashSet<WorldState> marked;
     private HashMap<WorldState, Double> dToG = new HashMap<>();
 
@@ -85,22 +86,17 @@ public class Solver {
      * 否则搜索F的每个邻居，更新每个邻居的s-t距离，然后把这些新的邻居放入pq
      * 重复这个循环
      */
-    private Node StateInPq(MinPQ<Node> p, WorldState x) {
-        for (Node a : p) {
-            if (a.self.equals(x)) {
-                return a;
-            }
-        }
-        return null;
-    }
+
 
     public Solver(WorldState initial) {
         marked = new HashSet<>();
         start = initial;
+        wInPQ = new HashMap<>();
 
         pq = new MinPQ<>();
         Node s = new Node(initial, 0, null);
         pq.insert(s);
+        wInPQ.put(s.self, s);
 
         end = s;
         while (!(end.self.isGoal() || pq.isEmpty())) {
@@ -111,9 +107,11 @@ public class Solver {
                 for (WorldState w : end.self.neighbors()) {
                     if (!marked.contains(w)) {
                         //pq.insert(new Node(w, end.distToStart + 1, end));
-                        Node oldW = StateInPq(pq, w);
+                        Node oldW = wInPQ.get(w);
                         if (oldW == null) {
-                            pq.insert(new Node(w, end.distToStart + 1, end));
+                            Node wNode = new Node(w, end.distToStart + 1, end);
+                            pq.insert(wNode);
+                            wInPQ.put(w, wNode);
                         } else if (end.distToStart + 1 < oldW.distToStart) {
                             oldW.distToStart = end.distToStart + 1;
                             oldW.previousNode = end;
