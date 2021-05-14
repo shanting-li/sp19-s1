@@ -212,7 +212,7 @@ public class Board implements WorldState{
         }
 
         Board that = (Board) y;
-        return Arrays.equals(this.bd, that.bd);
+        return Arrays.deepEquals(this.bd, that.bd);
 
     }
 
