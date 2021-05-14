@@ -161,8 +161,7 @@ public class Board implements WorldState {
         int ham = 0;
         for (int x = 0; x < bd.length; x++) {
             for (int y = 0; y < bd.length; y++) {
-                int temp = bd[x][y];
-                if (temp != 0 && temp != x * N + y + 1) {
+                if (bd[x][y] != 0 && bd[x][y] != x * N + y + 1) {
                     ham += 1;
                 }
             }
@@ -196,7 +195,6 @@ public class Board implements WorldState {
      */
     @Override
     public int estimatedDistanceToGoal() {
-        //return hamming();
         return manhattan();
     }
 
@@ -239,16 +237,5 @@ public class Board implements WorldState {
         s.append("\n");
         return s.toString();
     }
-
-    /*public static void main(String[] args) {
-        int[][] t = new int[4][4];
-        for (int i = 0; i < t.length; i++) {
-            for (int j = 0; j < t.length; j++) {
-                t[i][j] = i + j;
-            }
-        }
-        Board x = new Board(t);
-        System.out.println(Integer.parseInt(x.toString());
-    }*/
 
 }
