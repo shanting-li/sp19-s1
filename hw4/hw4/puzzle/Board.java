@@ -161,8 +161,9 @@ public class Board implements WorldState{
         int ham = 0;
         for (int x = 0; x < bd.length; x++) {
             for (int y = 0; y < bd.length; y++) {
-                if (bd[x][y] != 0 && bd[x][y] != x * N + y + 1) {
-                        ham += 1;
+                int temp = bd[x][y];
+                if (temp != 0 && temp != x * N + y + 1) {
+                    ham += 1;
                 }
             }
         }
@@ -195,7 +196,8 @@ public class Board implements WorldState{
      */
     @Override
     public int estimatedDistanceToGoal() {
-        return manhattan();
+        return hamming();
+        //return manhattan();
     }
 
     /**
