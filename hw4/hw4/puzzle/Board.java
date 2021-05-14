@@ -134,6 +134,7 @@ public class Board implements WorldState{
     /**
      * Returns the neighbors of the current board
      */
+    @Override
     public Iterable<WorldState> neighbors() {
         // 把emptyIndex上下左右都移动一遍
         Stack<WorldState> ans = new Stack<>();
@@ -192,6 +193,7 @@ public class Board implements WorldState{
      *               simply return the results of manhattan() when submitted to
      *               Gradescope.
      */
+    @Override
     public int estimatedDistanceToGoal() {
         return manhattan();
     }
@@ -200,6 +202,7 @@ public class Board implements WorldState{
      * Returns true if this board's tile values are the same
      *               position as y's
      */
+    @Override
     public boolean equals(Object y) {
         if (this == y) {
             return true;
@@ -213,6 +216,10 @@ public class Board implements WorldState{
 
     }
 
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(bd);
+    }
 
     /** Returns the string representation of the board. 
       * Uncomment this method. */
