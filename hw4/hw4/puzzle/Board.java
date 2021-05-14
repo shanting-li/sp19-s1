@@ -3,9 +3,9 @@ package hw4.puzzle;
 import java.util.Arrays;
 import java.util.Stack;
 
-public class Board implements WorldState{
+public class Board implements WorldState {
     private int[][] bd;
-    private int N;//N*N square
+    private int N; //N*N square
     private Position emp;
 
     private class Position {
@@ -86,7 +86,7 @@ public class Board implements WorldState{
     private WorldState neighbor(String direction) {
         Board nb = new Board(bd);
 
-        switch(direction) {
+        switch (direction) {
             case "l" :
                 Position left = leftIndex(nb.emp);
                 if (isInBound(left)) {
@@ -228,8 +228,8 @@ public class Board implements WorldState{
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        int N = size();
-        s.append(N + "\n");
+        int num = size();
+        s.append(num + "\n");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 s.append(String.format("%2d ", tileAt(i,j)));

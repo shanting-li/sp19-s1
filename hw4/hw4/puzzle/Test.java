@@ -3,7 +3,7 @@ package hw4.puzzle;
 import java.util.ArrayList;
 import java.util.Stack;
 
-public class test {
+public class Test {
     public static void main(String[] args) {
         /*Stack<Integer> x = new Stack<>();
         x.push(1);
@@ -42,7 +42,7 @@ public class test {
 
         String a = "home";
         String b = "hole";
-        System.out.println(b.compareTo(a));//-1
+        System.out.println(b.compareTo(a)); //-1
 
         int[][] xx = new int[5][5];
         xx[1][4] = 34;
@@ -50,7 +50,7 @@ public class test {
         System.out.println(xx[4][1]);
         System.out.println(xx[1][4]);
 
-        Stack<Integer> y  = new Stack<>();
+        Stack<Integer> y = new Stack<>();
         y.push(null);
         System.out.println(y.size());
 
