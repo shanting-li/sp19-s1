@@ -115,4 +115,12 @@ public class Word implements WorldState {
         result = 31 * result + (goal != null ? goal.hashCode() : 0);
         return result;
     }
+
+    public static void main(String[] args) {
+        Word x = new Word("cube", "tube");
+        System.out.println(x.getClass());
+        String s = "class hw4.puzzle.Word";
+        System.out.println(s.equals(x.getClass().toString()));
+
+    }
 }

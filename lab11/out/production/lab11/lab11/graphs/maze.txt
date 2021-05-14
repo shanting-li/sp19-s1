@@ -6,4 +6,4 @@ MazeType = POPEN_SOLVABLE
 %MazeType = BLANK
 
 pOpen = 0.48
-DRAW_DELAY_MS = 30
+DRAW_DELAY_MS = 120

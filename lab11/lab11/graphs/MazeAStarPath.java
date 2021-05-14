@@ -1,6 +1,8 @@
 package lab11.graphs;
 
 
+import java.util.PriorityQueue;
+
 /**
  *  @author Josh Hug
  */
@@ -9,9 +11,8 @@ public class MazeAStarPath extends MazeExplorer {
     private int t;
     private boolean targetFound = false;
     private Maze maze;
-    private int[] priority;
-    private int unmarked;
-    private int minItem;
+
+    private PriorityQueue<star> queue;
 
     public MazeAStarPath(Maze m, int sourceX, int sourceY, int targetX, int targetY) {
         super(m);
@@ -20,14 +21,11 @@ public class MazeAStarPath extends MazeExplorer {
         t = maze.xyTo1D(targetX, targetY);
         distTo[s] = 0;
         edgeTo[s] = s;
+        distTo[t] = Integer.MAX_VALUE;
 
-        priority = new int[maze.V()];
-        for (int i = 0; i < maze.V(); i++) {
-            priority[i] = Integer.MAX_VALUE;
-        }
-        priority[s]= distTo[s] + h(s);
-        unmarked = maze.V();
-        minItem = s;
+        queue = new PriorityQueue<star>();
+        queue.add(new star(s, distTo[s] + h(s)));
+
         // heap按照h(s,v)+h(v,t)排列
     }
 
@@ -44,6 +42,23 @@ public class MazeAStarPath extends MazeExplorer {
         return -1;
     }
 
+
+    private class star implements Comparable {
+        int item;
+        int priority;
+
+        public star(int i, int p) {
+            item = i;
+            priority = p;
+        }
+
+        @Override
+        public int compareTo(Object o) {
+            star that = (star) o;
+            return this.priority - that.priority;
+        }
+    }
+
     /** Performs an A star search from vertex s. */
     private void astar(int s) {
         //v = min.poll,mark v, 看v和target是否相等
@@ -54,29 +69,25 @@ public class MazeAStarPath extends MazeExplorer {
 
         int v = s;
         marked[v] = true;
-        priority[v] = Integer.MAX_VALUE;
-        unmarked -= 1;
         announce();
 
         if (v == t) {
             distTo[t] = distTo[v];
-            edgeTo[t] = edgeTo[v];
+            edgeTo[t] = v;
             return;
-        } else if (unmarked > 0) {
+        } else {
             for (int w : maze.adj(v)) {
-                if ((!marked[w]) && (distTo[v] + 1 < distTo[w])) {
+                if (!marked[w] && distTo[v] + 1 < distTo[w]) {
                     distTo[w] = distTo[v] + 1;
                     edgeTo[w] = v;
                     announce();
 
-                    int disW = distTo[w] + h(w);
-                    priority[w] = disW;
-                    if (disW < priority[minItem]) {
-                        minItem = w;
-                    }
+                    queue.add(new star(w, distTo[w] + h(w)));
                 }
             }
-            astar(minItem);
+            if (!queue.isEmpty()) {
+                astar(queue.poll().item);
+            }
         }
 
     }
@@ -84,7 +95,7 @@ public class MazeAStarPath extends MazeExplorer {
 
     @Override
     public void solve() {
-        astar(s);
+        astar(queue.poll().item);
     }
 
 }
