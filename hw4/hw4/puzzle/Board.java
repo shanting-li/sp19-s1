@@ -196,8 +196,8 @@ public class Board implements WorldState{
      */
     @Override
     public int estimatedDistanceToGoal() {
-        return hamming();
-        //return manhattan();
+        //return hamming();
+        return manhattan();
     }
 
     /**
