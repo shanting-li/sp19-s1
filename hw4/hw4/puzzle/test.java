@@ -53,6 +53,11 @@ public class test {
         Stack<Integer> y  = new Stack<>();
         y.push(null);
         System.out.println(y.size());
+
+        String ss = "work";
+        String sx = "4pop";
+        System.out.println(ss.matches("[a-zA-Z]+"));
+        System.out.println(sx.matches("[a-zA-Z]+"));
     }
 
 }

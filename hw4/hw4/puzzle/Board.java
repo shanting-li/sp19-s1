@@ -223,6 +223,7 @@ public class Board implements WorldState{
 
     /** Returns the string representation of the board. 
       * Uncomment this method. */
+    @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
         int N = size();
@@ -236,5 +237,16 @@ public class Board implements WorldState{
         s.append("\n");
         return s.toString();
     }
+
+    /*public static void main(String[] args) {
+        int[][] t = new int[4][4];
+        for (int i = 0; i < t.length; i++) {
+            for (int j = 0; j < t.length; j++) {
+                t[i][j] = i + j;
+            }
+        }
+        Board x = new Board(t);
+        System.out.println(Integer.parseInt(x.toString());
+    }*/
 
 }

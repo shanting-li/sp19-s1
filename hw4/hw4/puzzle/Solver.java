@@ -9,7 +9,7 @@ public class Solver {
     private WorldState start;
     private Node end;
     private MinPQ<Node> pq;
-    private HashSet<Node> marked;
+    private HashSet<WorldState> marked;
     private HashMap<WorldState, Double> dToG = new HashMap<>();
 
     /**
@@ -39,15 +39,16 @@ public class Solver {
         public int compareTo(Object o) {
             Node that = (Node) o;
 
-
-            String wordClass = "class hw4.puzzle.Word";
-
             //优化2 cache 对 distance to goal的估算，每个word只算一次，就存入map中
+
+            //word puzzle还需要考虑字母出现的位置先后和字母本身的顺序
+            /*String wordClass1 = "class hw4.puzzle.Word";
+            String wordClass2 = "class hw4.puzzle.AlphabetEasyPuzzle";*/
+
             double thisP = this.distToStart + getDToG(this.self) - 0.2;
             double thatP = that.distToStart + getDToG(that.self) - 0.2;
 
-            //word puzzle还需要考虑字母出现的位置先后和字母本身的顺序
-            if (this.self.getClass().toString().equals(wordClass)) {
+            if (this.self.toString().matches("[a-zA-Z]+")) {
                 double add = this.self.toString().compareTo(that.self.toString());
                 if (add < 0) {
                     thisP -= 0.2;
@@ -84,6 +85,15 @@ public class Solver {
      * 否则搜索F的每个邻居，更新每个邻居的s-t距离，然后把这些新的邻居放入pq
      * 重复这个循环
      */
+    private Node StateInPq(MinPQ<Node> p, WorldState x) {
+        for (Node a : p) {
+            if (a.self.equals(x)) {
+                return a;
+            }
+        }
+        return null;
+    }
+
     public Solver(WorldState initial) {
         marked = new HashSet<>();
         start = initial;
@@ -95,12 +105,20 @@ public class Solver {
         end = s;
         while (!(end.self.isGoal() || pq.isEmpty())) {
             end = pq.delMin();
-            marked.add(end);
+            marked.add(end.self);
             //要注意一个节点没有neighbors的情况
             if (end.self.neighbors() != null) {
                 for (WorldState w : end.self.neighbors()) {
                     if (!marked.contains(w)) {
-                        pq.insert(new Node(w, end.distToStart + 1, end));
+                        //pq.insert(new Node(w, end.distToStart + 1, end));
+                        Node oldW = StateInPq(pq, w);
+                        if (oldW == null) {
+                            pq.insert(new Node(w, end.distToStart + 1, end));
+                        } else if (end.distToStart + 1 < oldW.distToStart) {
+                            oldW.distToStart = end.distToStart + 1;
+                            oldW.previousNode = end;
+                        }
+
                     }
                 }
             }
