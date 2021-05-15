@@ -46,10 +46,13 @@ public class Solver {
             /*String wordClass1 = "class hw4.puzzle.Word";
             String wordClass2 = "class hw4.puzzle.AlphabetEasyPuzzle";*/
 
-            double thisP = this.distToStart + getDToG(this.self) - 0.2;
-            double thatP = that.distToStart + getDToG(that.self) - 0.2;
+            double thisP = this.distToStart + getDToG(this.self);
+            double thatP = that.distToStart + getDToG(that.self);
 
             if (this.self.toString().matches("[a-zA-Z]+")) {
+                thisP -= 0.2;
+                thatP -= 0.2;
+
                 double add = this.self.toString().compareTo(that.self.toString());
                 if (add < 0) {
                     thisP -= 0.2;
@@ -57,6 +60,7 @@ public class Solver {
                     thisP += 0.2;
                 }
             }
+
 
             return Double.compare(thisP, thatP);
         }
@@ -87,21 +91,45 @@ public class Solver {
      * 重复这个循环
      */
 
-
     public Solver(WorldState initial) {
         marked = new HashSet<>();
         start = initial;
-        wInPQ = new HashMap<>();
 
         pq = new MinPQ<>();
-        Node s = new Node(initial, 0, null);
-        pq.insert(s);
-        wInPQ.put(s.self, s);
+        wInPQ = new HashMap<>();
 
-        end = s;
+        Node s = new Node(start, 0, null);
+        pq.insert(s);
+        wInPQ.put(start, s);
+
+        // 每次从pq取出顶部的数，标记，如果是goal就返回
+        // 如果不是goal，找出它未被标记过的邻居，给邻居标注好priority（没有的新加，已有的修改）
+
+        while (!pq.isEmpty()) {
+            Node v = pq.delMin();
+            marked.add(v.self);
+
+            if (v.self.isGoal()) {
+                end = v;
+                break;
+            } else {
+                if (v.self.neighbors() != null) {
+                    for (WorldState w : v.self.neighbors()) {
+                        if (!marked.contains(w)) {
+                            pq.insert(new Node(w, v.distToStart + 1, v));
+                        }
+                    }
+                }
+            }
+        }
+
+
+        /*end = s;
         while (!(end.self.isGoal() || pq.isEmpty())) {
             end = pq.delMin();
+            wInPQ.remove(end.self);
             marked.add(end.self);
+
             //要注意一个节点没有neighbors的情况
             if (end.self.neighbors() != null) {
                 for (WorldState w : end.self.neighbors()) {
@@ -111,7 +139,7 @@ public class Solver {
                         if (oldW == null) {
                             Node wNode = new Node(w, end.distToStart + 1, end);
                             pq.insert(wNode);
-                            wInPQ.put(w, wNode);
+                            wInPQ.put(wNode.self, wNode);
                         } else if (end.distToStart + 1 < oldW.distToStart) {
                             oldW.distToStart = end.distToStart + 1;
                             oldW.previousNode = end;
@@ -120,8 +148,7 @@ public class Solver {
                     }
                 }
             }
-
-        }
+        }*/
 
     }
 
@@ -137,7 +164,7 @@ public class Solver {
         while (temp.previousNode != null) {
             reverse.push(temp.self);
             temp = temp.previousNode;
-            }
+        }
         reverse.push(start);
 
         while (!reverse.isEmpty()) {
