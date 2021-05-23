@@ -75,7 +75,7 @@ public class MergeSort {
 
     private static <Item extends Comparable> Queue<Queue<Item>> helpMergeSort(
             Queue<Queue<Item>> q) {
-        if (q.size() == 1) {
+        if (q.size() <= 1) {
             return q;
         } else {
             Queue<Item> first = q.dequeue();
