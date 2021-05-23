@@ -73,17 +73,6 @@ public class MergeSort {
         return merged;
     }
 
-    private static <Item extends Comparable> Queue<Queue<Item>> helpMergeSort(
-            Queue<Queue<Item>> q) {
-        if (q.size() <= 1) {
-            return q;
-        } else {
-            /*Queue<Item> first = q.dequeue();
-            Queue<Item> second = q.dequeue();*/
-            q.enqueue(mergeSortedQueues(q.dequeue(), q.dequeue()));
-            return helpMergeSort(q);
-        }
-    }
     /** Returns a Queue that contains the given items sorted from least to greatest. */
     public static <Item extends Comparable> Queue<Item> mergeSort(
             Queue<Item> items) {
@@ -93,10 +82,6 @@ public class MergeSort {
         if (items.isEmpty()) {
             return items;
         }
-
-        /*Queue<Queue<Item>> queues = makeSingleItemQueues(items);
-        return helpMergeSort(queues).peek();*/
-
 
         Queue<Queue<Item>> queues = makeSingleItemQueues(items);
         while (queues.size() != 1) {
@@ -113,8 +98,8 @@ public class MergeSort {
         test.enqueue(9);
         test.enqueue(3);*/
 
-        for (int i = 0; i < 100000; i++) {
-            int x = (int) (Math.random() * 100000);
+        for (int i = 0; i < 10; i++) {
+            int x = (int) (Math.random() * 100);
             test.enqueue(x);
         }
 
