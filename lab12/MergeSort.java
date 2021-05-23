@@ -78,9 +78,9 @@ public class MergeSort {
         if (q.size() <= 1) {
             return q;
         } else {
-            Queue<Item> first = q.dequeue();
-            Queue<Item> second = q.dequeue();
-            q.enqueue(mergeSortedQueues(first, second));
+            /*Queue<Item> first = q.dequeue();
+            Queue<Item> second = q.dequeue();*/
+            q.enqueue(mergeSortedQueues(q.dequeue(), q.dequeue()));
             return helpMergeSort(q);
         }
     }
