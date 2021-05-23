@@ -117,10 +117,27 @@ public class Word implements WorldState {
     }
 
     public static void main(String[] args) {
-        Word x = new Word("cube", "tube");
+        /*Word x = new Word("cube", "tube");
         System.out.println(x.getClass());
         String s = "class hw4.puzzle.Word";
-        System.out.println(s.equals(x.getClass().toString()));
+        System.out.println(s.equals(x.getClass().toString()));*/
+
+        Word x = new Word("hole", "nurse");
+        Word y = new Word("home", "nurse");
+
+        double thisP = 1 + x.estimatedDistanceToGoal() -0.2;
+        double thatP = 1 + y.estimatedDistanceToGoal() -0.2;
+
+        if (x.toString().matches("[a-zA-Z]+")) {
+            double add = x.toString().compareTo(y.toString());
+            if (add < 0) {
+                thisP -= 0.2;
+            } else if (add > 0) {
+                thisP += 0.2;
+            }
+        }
+
+        System.out.println(Double.compare(thisP, thatP));
 
     }
 }

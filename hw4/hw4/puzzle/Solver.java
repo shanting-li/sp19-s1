@@ -50,14 +50,14 @@ public class Solver {
             double thatP = that.distToStart + getDToG(that.self);
 
             if (this.self.toString().matches("[a-zA-Z]+")) {
-                thisP -= 0.2;
-                thatP -= 0.2;
+                //thisP -= 0.2;
+                //thatP -= 0.2;
 
                 double add = this.self.toString().compareTo(that.self.toString());
                 if (add < 0) {
-                    thisP -= 0.2;
+                    thisP *= 0.95;
                 } else if (add > 0) {
-                    thisP += 0.2;
+                    thatP *= 0.95;
                 }
             }
 
@@ -122,33 +122,6 @@ public class Solver {
                 }
             }
         }
-
-
-        /*end = s;
-        while (!(end.self.isGoal() || pq.isEmpty())) {
-            end = pq.delMin();
-            wInPQ.remove(end.self);
-            marked.add(end.self);
-
-            //要注意一个节点没有neighbors的情况
-            if (end.self.neighbors() != null) {
-                for (WorldState w : end.self.neighbors()) {
-                    if (!marked.contains(w)) {
-                        //pq.insert(new Node(w, end.distToStart + 1, end));
-                        Node oldW = wInPQ.get(w);
-                        if (oldW == null) {
-                            Node wNode = new Node(w, end.distToStart + 1, end);
-                            pq.insert(wNode);
-                            wInPQ.put(wNode.self, wNode);
-                        } else if (end.distToStart + 1 < oldW.distToStart) {
-                            oldW.distToStart = end.distToStart + 1;
-                            oldW.previousNode = end;
-                        }
-
-                    }
-                }
-            }
-        }*/
 
     }
 

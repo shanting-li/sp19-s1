@@ -35,7 +35,16 @@ public class MergeSort {
     private static <Item extends Comparable> Queue<Queue<Item>>
             makeSingleItemQueues(Queue<Item> items) {
         // Your code here!
-        return null;
+        // 新建一个queues的数列
+        // 遍历每个元素，把这个新元素建成一个queue，放入到queues中
+
+        Queue<Queue<Item>> queues = new Queue<>();
+        for (Item i : items) {
+            Queue<Item> single = new Queue<>();
+            single.enqueue(i);
+            queues.enqueue(single);
+        }
+        return queues;
     }
 
     /**
@@ -54,13 +63,106 @@ public class MergeSort {
     private static <Item extends Comparable> Queue<Item> mergeSortedQueues(
             Queue<Item> q1, Queue<Item> q2) {
         // Your code here!
-        return null;
+        // 对2个数组调用get min，把得到的这个数放到一个新queue里面，
+        // 直到其中一个数列为空，把另一个数组直接接到新queue后面
+        Queue<Item> merged = new Queue<>();
+        while (!q1.isEmpty() || !q2.isEmpty()) {
+            Item i = getMin(q1, q2);
+            merged.enqueue(i);
+        }
+        return merged;
     }
 
+    private static <Item extends Comparable> Queue<Queue<Item>> helpMergeSort(
+            Queue<Queue<Item>> q) {
+        if (q.size() == 1) {
+            return q;
+        } else {
+            Queue<Item> first = q.dequeue();
+            Queue<Item> second = q.dequeue();
+            q.enqueue(mergeSortedQueues(first, second));
+            return helpMergeSort(q);
+        }
+    }
     /** Returns a Queue that contains the given items sorted from least to greatest. */
     public static <Item extends Comparable> Queue<Item> mergeSort(
             Queue<Item> items) {
         // Your code here!
-        return items;
+        // 1 把原数列items平分一直平分到只有1个数，makeSingleItemQueues
+        // 2 把单个的queue 两个两个merge起来，mergeSortedQueues，然后再两个两个merge起来
+        if (items.isEmpty()) {
+            return items;
+        }
+
+        Queue<Queue<Item>> queues = makeSingleItemQueues(items);
+        return helpMergeSort(queues).peek();
+
+
+        /* while 写法
+        Queue<Queue<Item>> queues = makeSingleItemQueues(items);
+        int count = 1;
+        Queue<Item> first = new Queue<>();
+        Queue<Item> second = new Queue<>();
+        Queue<Queue<Item>> temp = new Queue<>();
+
+        while (temp.size() != 1) {
+            while (!queues.isEmpty()) {
+                if (count % 2 != 0) {
+                    first = queues.dequeue();
+                } else {
+                    second = queues.dequeue();
+                    temp.enqueue(mergeSortedQueues(first, second));
+                    first = new Queue<>();
+                    second = new Queue<>();
+                }
+                count ++;
+
+            }
+            if (!first.isEmpty()) {
+                temp.enqueue(first);
+            }
+
+            if (temp.size() != 1) {
+                queues = temp;
+                temp = new Queue<>();
+            }
+        }
+        return temp.peek();*/
+    }
+
+    public static void main(String[] args) {
+        Queue<Integer> test = new Queue<>();
+        test.enqueue(5);
+        test.enqueue(8);
+        test.enqueue(9);
+        test.enqueue(3);
+
+        Queue<Integer> sorted = mergeSort(test);
+        System.out.println(test);
+        System.out.println(sorted);
+
+
+        // test makeSingleItemQueues
+        /*Queue<Queue<Integer>> s = makeSingleItemQueues(test);
+        System.out.println(test);
+        for (Queue<Integer> q : s) {
+            System.out.print(q);
+        }*/
+
+        // test mergeSortedQueues
+        /*Queue<Integer> s1 = new Queue<>();
+        s1.enqueue(1);
+        s1.enqueue(8);
+
+        Queue<Integer> s2 = new Queue<>();
+        s2.enqueue(2);
+        s2.enqueue(4);
+        s2.enqueue(9);
+        s2.enqueue(14);
+
+        Queue<Integer> mergeS1AndS2 = mergeSortedQueues(s1, s2);
+        System.out.println(mergeS1AndS2.size());
+        System.out.println(mergeS1AndS2);// 1,2,4,8,9,14*/
+
     }
 }

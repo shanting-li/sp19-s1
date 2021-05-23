@@ -60,6 +60,7 @@ public class Test {
         System.out.println(ss.matches("[a-zA-Z]+"));
         System.out.println(sx.matches("[a-zA-Z]+"));
         System.out.println(Character.toString(c).matches("[a-zA-Z]+"));
+
     }
 
 }
