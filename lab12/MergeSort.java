@@ -94,48 +94,29 @@ public class MergeSort {
             return items;
         }
 
+        /*Queue<Queue<Item>> queues = makeSingleItemQueues(items);
+        return helpMergeSort(queues).peek();*/
+
+
         Queue<Queue<Item>> queues = makeSingleItemQueues(items);
-        return helpMergeSort(queues).peek();
-
-
-        /* while 写法
-        Queue<Queue<Item>> queues = makeSingleItemQueues(items);
-        int count = 1;
-        Queue<Item> first = new Queue<>();
-        Queue<Item> second = new Queue<>();
-        Queue<Queue<Item>> temp = new Queue<>();
-
-        while (temp.size() != 1) {
-            while (!queues.isEmpty()) {
-                if (count % 2 != 0) {
-                    first = queues.dequeue();
-                } else {
-                    second = queues.dequeue();
-                    temp.enqueue(mergeSortedQueues(first, second));
-                    first = new Queue<>();
-                    second = new Queue<>();
-                }
-                count ++;
-
-            }
-            if (!first.isEmpty()) {
-                temp.enqueue(first);
-            }
-
-            if (temp.size() != 1) {
-                queues = temp;
-                temp = new Queue<>();
-            }
+        while (queues.size() != 1) {
+            queues.enqueue(mergeSortedQueues(queues.dequeue(), queues.dequeue()));
         }
-        return temp.peek();*/
+
+        return queues.peek();
     }
 
     public static void main(String[] args) {
         Queue<Integer> test = new Queue<>();
-        test.enqueue(5);
+        /*test.enqueue(5);
         test.enqueue(8);
         test.enqueue(9);
-        test.enqueue(3);
+        test.enqueue(3);*/
+
+        for (int i = 0; i < 100000; i++) {
+            int x = (int) (Math.random() * 100000);
+            test.enqueue(x);
+        }
 
         Queue<Integer> sorted = mergeSort(test);
         System.out.println(test);
