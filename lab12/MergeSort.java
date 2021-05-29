@@ -83,11 +83,30 @@ public class MergeSort {
             return items;
         }
 
-        Queue<Queue<Item>> queues = makeSingleItemQueues(items);
+        // 不stable的写法
+        /* Queue<Queue<Item>> queues = makeSingleItemQueues(items);
         while (queues.size() != 1) {
             queues.enqueue(mergeSortedQueues(queues.dequeue(), queues.dequeue()));
         }
 
+        return queues.peek();*/
+
+        // stable的写法
+        Queue<Queue<Item>> queues = makeSingleItemQueues(items);
+        int sizeOfEachLevel = 0;
+        while (queues.size() != 1) {
+            if (sizeOfEachLevel == 0) {
+                sizeOfEachLevel = queues.size();
+            }
+            if (sizeOfEachLevel == 1) {
+                queues.enqueue(queues.dequeue());
+                sizeOfEachLevel -= 1;
+            }
+
+            queues.enqueue(mergeSortedQueues(queues.dequeue(), queues.dequeue()));
+            sizeOfEachLevel -= 2;
+
+        }
         return queues.peek();
     }
 
@@ -98,7 +117,7 @@ public class MergeSort {
         test.enqueue(9);
         test.enqueue(3);*/
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             int x = (int) (Math.random() * 100);
             test.enqueue(x);
         }
@@ -116,7 +135,7 @@ public class MergeSort {
         }*/
 
         // test mergeSortedQueues
-        /*Queue<Integer> s1 = new Queue<>();
+        Queue<Integer> s1 = new Queue<>();
         s1.enqueue(1);
         s1.enqueue(8);
 
@@ -128,7 +147,7 @@ public class MergeSort {
 
         Queue<Integer> mergeS1AndS2 = mergeSortedQueues(s1, s2);
         System.out.println(mergeS1AndS2.size());
-        System.out.println(mergeS1AndS2);// 1,2,4,8,9,14*/
+        System.out.println(mergeS1AndS2);// 1,2,4,8,9,14
 
     }
 }

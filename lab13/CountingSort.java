@@ -67,6 +67,47 @@ public class CountingSort {
      */
     public static int[] betterCountingSort(int[] arr) {
         // TODO make counting sort work with arrays containing negative numbers.
-        return null;
+        // 找出min和max，确定alphabet的长度
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        for (int i : arr) {
+            max = Math.max(i, max);
+            min = Math.min(i, min);
+        }
+
+        // 创建count[]，记录每个alphabet出现的次数
+        int offset = Math.min(0,min);
+        int[] count = new int[max + 1 + Math.abs(offset)];
+        for (int i : arr) {
+            count[i - offset] ++;
+        }
+
+        // 创建start，记录每个alphabet在sorted[]里出现的index
+        int[] start = new int[count.length];
+        int add = 0;
+        for (int i = 0; i < start.length; i++) {
+            start[i] = add;
+            add += count[i];
+        }
+
+
+        //创建sorted[]
+        int[] sorted = new int[arr.length];
+        for (int i : arr) {
+            int value = i;
+            int index = start[value - offset];
+            sorted[index] = value;
+            start[i - offset] ++;
+        }
+        return sorted;
+    }
+
+    public static void main(String[] args) {
+        //int[] x = {9, 5, 2, 1, 5, 3, 0, 3, 1, 1};
+        int[] x = {9, 5, -4, 2, 1, -2, 5, 3, 0, -2, 3, 1, 1};
+        int[] y = betterCountingSort(x);
+        for (int i : y) {
+            System.out.print(i + " ");
+        }
     }
 }

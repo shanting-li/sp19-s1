@@ -22,14 +22,14 @@ public class CountingSortTester {
         }
     }
 
-    @Test
+    //@Test
     public void testNaiveWithNonNegative() {
         int[] sortedNonNegative = CountingSort.naiveCountingSort(nonNegative);
         assertIsSorted(sortedNonNegative);
     }
 
-    // This test should PASS to indicate that the naive solution is in fact WRONG
-    @Test
+    // This test should PASS to indicate that the naive solution is in fact WRONG@Test
+    //@Test
     public void testNaiveWithSomeNegative() {
         try {
             int[] sortedSomeNegative = CountingSort.naiveCountingSort(someNegative);
