@@ -68,7 +68,7 @@ public class CountingSort {
 
         // 创建count[]，记录每个alphabet出现的次数
         int offset = Math.min(0,min);
-        int[] count = new int[max + 1 + Math.abs(offset)];
+        int[] count = new int[max - offset + 1];
 
         for (int i = startIndex; i < endIndex; i++) {
             count[arr[i] - offset] ++;
@@ -150,14 +150,16 @@ public class CountingSort {
         }
         System.out.println(" ");*/
 
-        // sort the positive part
-        if (negNum > minNum) {
-            sorted = help(sorted, minNum, negNum);
-            if (maxNum > negNum) {
-                sorted = help(sorted, negNum, maxNum + 1);
+        if (negNum > 0) {
+            if (negNum > minNum) {
+                sorted = help(sorted, minNum, negNum);
+            } else {
+                sorted = help(sorted, minNum, maxNum + 1);
             }
         } else {
-            sorted = help(sorted, minNum, maxNum + 1);
+            if (maxNum < arr.length - 1) {
+                sorted = help(sorted, 0, maxNum + 1);
+            }
         }
 
 
@@ -166,16 +168,16 @@ public class CountingSort {
 
     public static void main(String[] args) {
         //int[] x = {9, 5, 2, 1, 5, 3, 0, 3, 1, 1};
-        int[] x = {9, 5, -4, 2, 1, -2, 5, 3, 0, -2, 3, 1, 1};
+        //int[] x = {9, 5, -4, 2, 1, -2, 5, 3, 0, -2, 3, 1, 1};
         //int[] x = {-85, Integer.MIN_VALUE, -23, -101};
         //int[] x = {-85, Integer.MAX_VALUE, -23, -101};
         //int[] x = {-85, -85, -85 -30, -23, -3};
-        //int[] x = {-85, Integer.MIN_VALUE, -23, -101, Integer.MAX_VALUE, Integer.MAX_VALUE,
-               // -85, -30, -53, 5, 52};
+        int[] x = {-85, Integer.MIN_VALUE, -23, -101, Integer.MAX_VALUE, Integer.MAX_VALUE,
+                -85, -30, -53, 5, 52, 2147483646};
         int[] y = betterCountingSort(x);
         for (int i : y) {
             System.out.print(i + " ");
         }
-        //System.out.println(Integer.MIN_VALUE);
+
     }
 }
