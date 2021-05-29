@@ -57,11 +57,11 @@ public class CountingSort {
         return sorted;
     }
 
-    private static int[] help(int[] arr, int startIndex) {
+    private static int[] help(int[] arr, int startIndex, int endIndex) {
         int max = Integer.MIN_VALUE;
         int min = Integer.MAX_VALUE;
 
-        for (int i = startIndex; i < arr.length; i++) {
+        for (int i = startIndex; i < endIndex; i++) {
             max = Math.max(arr[i], max);
             min = Math.min(arr[i], min);
         }
@@ -70,7 +70,7 @@ public class CountingSort {
         int offset = Math.min(0,min);
         int[] count = new int[max + 1 + Math.abs(offset)];
 
-        for (int i = startIndex; i < arr.length; i++) {
+        for (int i = startIndex; i < endIndex; i++) {
             count[arr[i] - offset] ++;
         }
 
@@ -86,7 +86,9 @@ public class CountingSort {
         //创建sorted[]
         int[] sorted = new int[arr.length];
         System.arraycopy(arr, 0, sorted, 0, startIndex);
-        for (int i = startIndex; i < arr.length; i++) {
+        System.arraycopy(arr, endIndex, sorted, endIndex, arr.length - endIndex);
+
+        for (int i = startIndex; i < endIndex; i++) {
             int value = arr[i];
             int index = start[value - offset];
             sorted[index] = value;
@@ -104,22 +106,61 @@ public class CountingSort {
      */
     public static int[] betterCountingSort(int[] arr) {
         // TODO make counting sort work with arrays containing negative numbers.
-        // clear Min_Value
+        // clear minus
         int[] sorted = new int[arr.length];
-        int minNum = 0;
+        int negNum = 0;
         for (int i = 0; i < arr.length; i++) {
-            if (arr[i] == Integer.MIN_VALUE) {
-                int temp = sorted[minNum];
-                sorted[minNum] = arr[i];
-                sorted[i] = temp;
-                minNum ++;
-            } else {
-                sorted[i] = arr[i];
+            if (arr[i] < 0) {
+                sorted[negNum] = arr[i];
+                negNum ++;
+            }
+        }
+        int c = negNum;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] >= 0) {
+                sorted[c] = arr[i];
+                c ++;
             }
         }
 
-        // sort the rest
-        sorted = help(sorted, minNum);
+        /*for (int s : sorted) {
+            System.out.print(s + " ");
+        }
+        System.out.println(" ");*/
+
+
+        int maxNum = arr.length - 1;
+        int minNum = 0;
+        for (int i = 0; i < maxNum; i++) {
+            if (sorted[i] == Integer.MIN_VALUE) {
+                int temp = sorted[minNum];
+                sorted[minNum] = sorted[i];
+                sorted[i] = temp;
+                minNum ++;
+            } else if (sorted[i] == Integer.MAX_VALUE){
+                int temp = sorted[maxNum];
+                sorted[maxNum] = sorted[i];
+                sorted[i] = temp;
+                maxNum --;
+            }
+        }
+
+        /*for (int s : sorted) {
+            System.out.print(s + " ");
+        }
+        System.out.println(" ");*/
+
+        // sort the positive part
+        if (negNum > minNum) {
+            sorted = help(sorted, minNum, negNum);
+            if (maxNum > negNum) {
+                sorted = help(sorted, negNum, maxNum + 1);
+            }
+        } else {
+            sorted = help(sorted, minNum, maxNum + 1);
+        }
+
+
         return sorted;
     }
 
@@ -127,7 +168,10 @@ public class CountingSort {
         //int[] x = {9, 5, 2, 1, 5, 3, 0, 3, 1, 1};
         int[] x = {9, 5, -4, 2, 1, -2, 5, 3, 0, -2, 3, 1, 1};
         //int[] x = {-85, Integer.MIN_VALUE, -23, -101};
+        //int[] x = {-85, Integer.MAX_VALUE, -23, -101};
         //int[] x = {-85, -85, -85 -30, -23, -3};
+        //int[] x = {-85, Integer.MIN_VALUE, -23, -101, Integer.MAX_VALUE, Integer.MAX_VALUE,
+               // -85, -30, -53, 5, 52};
         int[] y = betterCountingSort(x);
         for (int i : y) {
             System.out.print(i + " ");
