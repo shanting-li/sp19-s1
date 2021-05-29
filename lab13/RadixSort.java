@@ -39,8 +39,8 @@ public class RadixSort {
 
     private static int getCountIndex(String s, int index) {
         try{
-            return s.charAt(index) + 1;
-        } catch (IndexOutOfBoundsException e){
+            return (s.charAt(index) + 1);
+        } catch (StringIndexOutOfBoundsException e){
             return 0;
         }
     }
@@ -56,16 +56,16 @@ public class RadixSort {
         //把每个String的每一位转化成数字，占位符位于后面，
         // 比如abc = [97,98,99], b = [98,0,0]
         //对每一位进行counting sort
-        if (index == -1) {
+        if (index < 0) {
             return;
         } else {
-            int[] count = new int[256 + 1];
+            int[] count = new int[257];
             for (int i = 0; i < asciis.length; i++) {
                 int countIndex = getCountIndex(asciis[i], index);
                 count[countIndex] ++;
             }
 
-            int[] start = new int[256 + 1];
+            int[] start = new int[257];
             int add = 0;
             for (int i = 0; i < count.length; i++) {
                 start[i] = add;
@@ -104,14 +104,14 @@ public class RadixSort {
             return;
         } else {
             //创建count[]
-            int[] count = new int[256 + 1];
+            int[] count = new int[257];
             for (int i = start; i < end; i++) {
                 int countIndex = getCountIndex(asciis[i], index);
                 count[countIndex]++;
             }
 
             //创建start[]
-            int[] indexToStart = new int[256 + 1];
+            int[] indexToStart = new int[257];
             int add = start;
             for (int i = 0; i < count.length; i++) {
                 indexToStart[i] = add;
