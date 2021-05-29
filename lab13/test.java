@@ -5,12 +5,10 @@ public class test {
                 "seven", "help", "us","sos", "please"};*/
         String[] x = new String[]{"", "0", "ab0", "ab"};
 
-       /* String[] sorted = RadixSort.sort(x);
+       String[] sorted = RadixSort.sort(x);
         for (String s : sorted) {
             System.out.println(s);//Mike, help, maybe, please, seven, sos, think, us
-        }*/
-        System.out.println(x[1].charAt(2));
-
-
+        }
+        //System.out.println(x[1].charAt(2));
     }
 }

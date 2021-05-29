@@ -38,11 +38,18 @@ public class RadixSort {
     }
 
     private static int getCountIndex(String s, int index) {
-        try{
-            return (s.charAt(index) + 1);
+        if (index >= s.length() || index < 0) {
+            return 0;
+        } else {
+            return s.charAt(index) + 1;
+        }
+
+        /*try{
+            return s.charAt(index);
         } catch (StringIndexOutOfBoundsException e){
             return 0;
-        }
+        }*/
+
     }
 
     /**
