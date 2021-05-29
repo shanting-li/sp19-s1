@@ -57,45 +57,6 @@ public class CountingSort {
         return sorted;
     }
 
-    private static int[] help(int[] arr, int startIndex, int endIndex) {
-        int max = Integer.MIN_VALUE;
-        int min = Integer.MAX_VALUE;
-
-        for (int i = startIndex; i < endIndex; i++) {
-            max = Math.max(arr[i], max);
-            min = Math.min(arr[i], min);
-        }
-
-        // 创建count[]，记录每个alphabet出现的次数
-        int offset = Math.min(0,min);
-        int[] count = new int[max - offset + 1];
-
-        for (int i = startIndex; i < endIndex; i++) {
-            count[arr[i] - offset] ++;
-        }
-
-        // 创建start，记录每个alphabet在sorted[]里出现的index
-        int[] start = new int[count.length];
-        int add = startIndex;
-        for (int i = 0; i < start.length; i++) {
-            start[i] = add;
-            add += count[i];
-        }
-
-
-        //创建sorted[]
-        int[] sorted = new int[arr.length];
-        System.arraycopy(arr, 0, sorted, 0, startIndex);
-        System.arraycopy(arr, endIndex, sorted, endIndex, arr.length - endIndex);
-
-        for (int i = startIndex; i < endIndex; i++) {
-            int value = arr[i];
-            int index = start[value - offset];
-            sorted[index] = value;
-            start[value - offset] ++;
-        }
-        return sorted;
-    }
     /**
      * Counting sort on the given int array, must work even with negative numbers.
      * Note, this code does not need to work for ranges of numbers greater
@@ -106,78 +67,54 @@ public class CountingSort {
      */
     public static int[] betterCountingSort(int[] arr) {
         // TODO make counting sort work with arrays containing negative numbers.
-        // clear minus
+        // 找出min和max，确定alphabet的长度
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+
+        for (int i : arr) {
+            max = Math.max(i, max);
+            min = Math.min(i, min);
+        }
+
+        // 创建count[]，记录每个alphabet出现的次数
+        //为了考虑负数，所以做了这个offset，比如最小值是-5，那么就往右偏移5个单位，即count[0]
+        // 这里有个问题，就是如果offset是Integer.MinValue，那么abs会是个负数，导致int[n]的参数为负
+        int offset = Math.min(0,min);
+        int[] count = new int[max + 1 + Math.abs(offset)];
+
+        for (int i : arr) {
+            count[i - offset] ++;
+        }
+
+        // 创建start，记录每个alphabet在sorted[]里出现的index
+        int[] start = new int[count.length];
+        int add = 0;
+        for (int i = 0; i < start.length; i++) {
+            start[i] = add;
+            add += count[i];
+        }
+
+
+        //创建sorted[]
+        // 遍历原始数组，sorted的value是原数组[i]，其index是start[value对应的index]
         int[] sorted = new int[arr.length];
-        int negNum = 0;
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i] < 0) {
-                sorted[negNum] = arr[i];
-                negNum ++;
-            }
+        for (int i : arr) {
+            int value = i;
+            int index = start[value - offset];
+            sorted[index] = value;
+            start[i - offset] ++;
         }
-        int c = negNum;
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i] >= 0) {
-                sorted[c] = arr[i];
-                c ++;
-            }
-        }
-
-        /*for (int s : sorted) {
-            System.out.print(s + " ");
-        }
-        System.out.println(" ");*/
-
-
-        int maxNum = arr.length - 1;
-        int minNum = 0;
-        for (int i = 0; i < maxNum; i++) {
-            if (sorted[i] == Integer.MIN_VALUE) {
-                int temp = sorted[minNum];
-                sorted[minNum] = sorted[i];
-                sorted[i] = temp;
-                minNum ++;
-            } else if (sorted[i] == Integer.MAX_VALUE){
-                int temp = sorted[maxNum];
-                sorted[maxNum] = sorted[i];
-                sorted[i] = temp;
-                maxNum --;
-            }
-        }
-
-        /*for (int s : sorted) {
-            System.out.print(s + " ");
-        }
-        System.out.println(" ");*/
-
-        if (negNum > 0) {
-            if (negNum > minNum) {
-                sorted = help(sorted, minNum, negNum);
-            } else {
-                sorted = help(sorted, minNum, maxNum + 1);
-            }
-        } else {
-            if (maxNum < arr.length - 1) {
-                sorted = help(sorted, 0, maxNum + 1);
-            }
-        }
-
-
         return sorted;
     }
 
     public static void main(String[] args) {
-        //int[] x = {9, 5, 2, 1, 5, 3, 0, 3, 1, 1};
+        int[] x = {9, 5, 2, 1, 5, 3, 0, 3, 1, 1};
         //int[] x = {9, 5, -4, 2, 1, -2, 5, 3, 0, -2, 3, 1, 1};
         //int[] x = {-85, Integer.MIN_VALUE, -23, -101};
-        //int[] x = {-85, Integer.MAX_VALUE, -23, -101};
         //int[] x = {-85, -85, -85 -30, -23, -3};
-        int[] x = {-85, Integer.MIN_VALUE, -23, -101, Integer.MAX_VALUE, Integer.MAX_VALUE,
-                -85, -30, -53, 5, 52, 2147483646};
         int[] y = betterCountingSort(x);
         for (int i : y) {
             System.out.print(i + " ");
         }
-
     }
 }
