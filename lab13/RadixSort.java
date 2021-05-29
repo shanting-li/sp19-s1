@@ -39,7 +39,7 @@ public class RadixSort {
 
     private static int getCountIndex(String s, int index) {
         try{
-            return s.charAt(index);
+            return s.charAt(index) + 1;
         } catch (IndexOutOfBoundsException e){
             return 0;
         }
@@ -59,13 +59,13 @@ public class RadixSort {
         if (index == -1) {
             return;
         } else {
-            int[] count = new int[256];
+            int[] count = new int[256 + 1];
             for (int i = 0; i < asciis.length; i++) {
                 int countIndex = getCountIndex(asciis[i], index);
                 count[countIndex] ++;
             }
 
-            int[] start = new int[256];
+            int[] start = new int[256 + 1];
             int add = 0;
             for (int i = 0; i < count.length; i++) {
                 start[i] = add;
@@ -104,14 +104,14 @@ public class RadixSort {
             return;
         } else {
             //创建count[]
-            int[] count = new int[256];
+            int[] count = new int[256 + 1];
             for (int i = start; i < end; i++) {
                 int countIndex = getCountIndex(asciis[i], index);
                 count[countIndex]++;
             }
 
             //创建start[]
-            int[] indexToStart = new int[256];
+            int[] indexToStart = new int[256 + 1];
             int add = start;
             for (int i = 0; i < count.length; i++) {
                 indexToStart[i] = add;

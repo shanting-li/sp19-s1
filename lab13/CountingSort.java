@@ -70,6 +70,7 @@ public class CountingSort {
         // 找出min和max，确定alphabet的长度
         int max = Integer.MIN_VALUE;
         int min = Integer.MAX_VALUE;
+
         for (int i : arr) {
             max = Math.max(i, max);
             min = Math.min(i, min);
